@@ -1,5 +1,5 @@
-import NavigationBar from "@/common/NavigationBar";
-import Body from "./admin";
+import NavigationBar from "@/components/common/NavigationBar";
+import Body from "./body";
 
 export default function AdminView() {
     return (
