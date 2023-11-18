@@ -1,4 +1,5 @@
 "use client";
+import LogIn from "@/components/feifei/log_in";
 import AdminView from "@/components/mia/admin_view";
 import EditProfile from "@/components/mia/edit_profile";
 import Profile from "@/components/mia/profile";
@@ -9,7 +10,8 @@ export default function Home() {
     <BrowserRouter>
       {/* <AdminView /> */}
       {/* <Profile /> */}
-      <EditProfile />
+      {/* <EditProfile /> */}
+      <LogIn />
     </BrowserRouter>
   );
 }

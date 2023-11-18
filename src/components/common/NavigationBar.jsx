@@ -8,7 +8,7 @@ export default function NavigationBar(props) {
   };
 
   // const isLoggedIn = props.isLoggedIn;
-    const isLoggedIn = true;
+  const isLoggedIn = true;
 
   return (
     <nav className="items-center bg-red-700 text-white flex justify-between h-10 px-8 px-5 py-0 max-md:flex max-sm:flex max-sm:flex-col max-sm:self-stretch max-sm:grow-0 max-sm:min-h-[auto] max-sm:items-stretch max-sm:h-auto">
