@@ -30,6 +30,7 @@ export default function LoginForm(props) {
   };
 
   return (
+    
     <section className="flex flex-col relative shrink-0 box-border bg-white min-h-[200px] pb-24 px-24 max-md:flex max-sm:flex">
       <div className="flex flex-col relative shrink-0 box-border mt-5 mb-1.5">
         <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
@@ -89,5 +90,6 @@ export default function LoginForm(props) {
         </div>
       </div>
     </section>
+  
   );
 };
