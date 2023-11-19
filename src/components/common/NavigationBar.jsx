@@ -1,9 +1,14 @@
 'use client';
+import { useRouter } from "next/navigation";
 import * as React from "react";
 
 export default function NavigationBar(props) {
+  const router = useRouter();
   const handleButtonClick = (label) => {
-    console.log(`Button clicked: ${label}`);
+    if (label === "Home") {
+      router.push('/');
+    }
+    
     // Add your logic here
   };
 
