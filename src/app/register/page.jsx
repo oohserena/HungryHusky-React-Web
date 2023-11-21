@@ -1,5 +1,5 @@
 "use client";
-import Register from "@/components/feifei/ register";
+import Register from "@/components/feifei/register";
 import { BrowserRouter } from "react-router-dom";
 
 

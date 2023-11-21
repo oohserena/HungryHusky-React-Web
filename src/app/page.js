@@ -1,6 +1,6 @@
 "use client";
 import LogIn from "@/components/feifei/log_in";
-import Register from "@/components/feifei/ register";
+import Register from "@/components/feifei/register";
 import HomeSrceen from "@/components/feifei/home";
 import AdminView from "@/components/mia/admin_view";
 import EditProfile from "@/components/mia/edit_profile";
