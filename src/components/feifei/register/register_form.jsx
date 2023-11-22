@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 function RegisterForm(props) {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -52,11 +55,12 @@ function RegisterForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    navigate("/home");
+    router.push('/');
   };
 
   const handleLoginClick = () => {
-    navigate("/log_in");
+    //navigate(`/login`);
+    router.push('/login');
   };
 
   return (
@@ -119,14 +123,19 @@ function RegisterForm(props) {
             Sign Up
           </button>
           <p className="text-right mt-4">
-            Already on XX?
-            <a
+            Already on XX? &nbsp;
+            {/* <a
               href="#"
               className="text-blue-500 hover:text-blue-700 transition duration-300"
               onClick={handleLoginClick}
             >
               Log in
-            </a>
+            </a> */}
+            <button
+              type="button"
+              className="text-blue-500 hover:text-blue-700 transition duration-300"
+              onClick={handleLoginClick}
+            > Log in</button>
           </p>
         </form>
       </div>
