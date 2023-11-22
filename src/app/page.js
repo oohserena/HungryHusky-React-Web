@@ -9,12 +9,22 @@ import FoodieSearch from "@/components/serena/search_foodie";
 import SearchDetail from "@/components/serena/search_detail";
 import AnalyticsSearch from "@/components/serena/search_analytics";
 import WriteReview from "@/components/serena/write_review";
-import { BrowserRouter } from "react-router-dom";
+import SearchNoResults from "@/components/serena/search_no_results";
+import { BrowserRouter, Route, Switch} from "react-router-dom";
+
 
 export default function Home() {
+
   return (
-    <BrowserRouter>
-      <HomeSrceen />
-    </BrowserRouter>
+   
+      <BrowserRouter>
+        <Switch>
+          <Route path='/foodie_search' component={FoodieSearch} />
+          <Route path='/analytics_search' component={AnalyticsSearch} />
+          <Route path='/search_detail' component={SearchDetail} />
+          <Route path='/write_review' component={WriteReview} />
+        </Switch>
+      </BrowserRouter>
+ 
   );
 }

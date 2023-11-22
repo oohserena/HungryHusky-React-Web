@@ -1,13 +1,19 @@
-import React from "react";
+
+'use client';
+import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
+
 
 export default function RestaurantItem() {
-    // const handleFavorite = () => {
-    //   // Handle favorite button click
-    // };
+  const [isFavorite, setIsFavorite] = useState(false);
+    const router = useRouter();
+    const handleFavoriteClick = () => {
+      setIsFavorite(!isFavorite);
+    };
   
-    // const handleDetails = () => {
-    //   // Handle details button click
-    // };
+    const handleDetails = () => {
+      router.push('/search_detail');
+    };
   
     return (
       <article className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
@@ -64,7 +70,7 @@ export default function RestaurantItem() {
                                   8,000
                                 </div>
                               </div>
-                              <div className="flex flex-col items-stretch w-[33%] ml-5 max-md:w-full max-md:ml-0">
+                              <div className="flex flex-col items-stretch w-[33%] ml-5 max-md:w-full max-md:ml-0" >
                                 <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
                                   Favorites
                                 </div>
@@ -91,17 +97,21 @@ export default function RestaurantItem() {
                 <div className="flex flex-col relative shrink-0 box-border mt-3.5 pl-36 max-sm:mt-8">
                   <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                     <div className="flex flex-col items-stretch w-6/12 max-md:w-full max-md:ml-0">
-                      <button
-                        className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer font-semibold text-lg ml-auto mt-20 px-6 py-4 max-sm:mr-14"
-                        // onClick={handleFavorite}
-                      >
-                        Favorite
-                      </button>
+                    <button className={`relative shrink-0 box-border appearance-none font-semibold text-lg mt-20 px-6 py-4 max-sm:mr-14 ${
+                        isFavorite
+                          ? 'bg-white text-neutral-600 border-solid border-neutral-200'
+                          : 'bg-red-700 text-white'
+                      }`}
+                      style={{ width: '204px' }}
+                      onClick={handleFavoriteClick}
+                     >
+                        {isFavorite ? 'Unfavorite' : 'Favorite'}
+                  </button>
                     </div>
                     <div className="flex flex-col items-stretch w-6/12 ml-5 max-md:w-full max-md:ml-0">
                       <button
                         className="relative shrink-0 box-border appearance-none bg-white text-neutral-600 rounded text-center cursor-pointer border font-semibold text-lg ml-16 mr-auto mt-20 px-6 py-4 border-solid border-neutral-400 max-sm:ml-1 max-sm:mt-5"
-                        // onClick={handleDetails}
+                        onClick={handleDetails}
                       >
                         Details
                       </button>

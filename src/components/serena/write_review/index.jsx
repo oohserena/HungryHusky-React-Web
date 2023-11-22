@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import NavigationBar from "@/components/common/NavigationBar";
 import WriteBody from "./WriteBody";

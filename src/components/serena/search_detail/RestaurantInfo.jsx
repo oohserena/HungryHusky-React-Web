@@ -1,11 +1,15 @@
 
-
+'use client';
 import React from "react";
 import "./index.css";
+import { useRouter } from 'next/navigation';
 
 export default function RestaurantInfo(props) {
+ 
+  const router = useRouter();
   const handleButtonClick = () => {
     // handle button click event here
+    router.push('/write_review');
   };
 
   return (
