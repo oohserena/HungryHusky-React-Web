@@ -76,24 +76,6 @@ export default function EditForm(props) {
           required
         />
       </label>
-      <label htmlFor="address" className="text-base mt-2.5">
-        <span>
-          <strong>
-            <span className="text-2xl">Address</span>
-          </strong>
-        </span>
-        <br />
-        <input
-          id="address"
-          name="address"
-          type="text"
-          placeholder="Your new address"
-          className="border min-h-[40px] mt-2.5 border-solid border-neutral-400"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        />
-      </label>
       <div className="flex flex-col relative shrink-0 box-border h-auto bg-white pb-8">
         <div className="flex flex-col relative shrink-0 box-border">
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">

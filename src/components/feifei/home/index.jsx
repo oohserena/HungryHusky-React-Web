@@ -9,7 +9,7 @@ export default function HomeScreen() {
         {/* <NavigationBar /> */}
         <NavHome />
         <HomeComponent />
-        
+
         </div>
     );
 }
