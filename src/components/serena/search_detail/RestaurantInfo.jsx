@@ -1,9 +1,15 @@
+
+'use client';
 import React from "react";
 import "./index.css";
+import { useRouter } from 'next/navigation';
 
 export default function RestaurantInfo(props) {
+ 
+  const router = useRouter();
   const handleButtonClick = () => {
     // handle button click event here
+    router.push('/write_review');
   };
 
   return (
@@ -17,7 +23,7 @@ export default function RestaurantInfo(props) {
             <img
               loading="lazy"
               srcSet="https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=100 100w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=200 200w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=400 400w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=800 800w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=1200 1200w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=1600 1600w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=2000 2000w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51"className="aspect-[1.51] object-cover object-center w-full shrink-0 box-border min-w-[20px] overflow-hidden mt-5"
-              className="object-cover w-500 h-50 shrink-0 box-border min-w-[20px] overflow-hidden mt-5"
+              // className="object-cover w-500 h-50 shrink-0 box-border min-w-[20px] overflow-hidden mt-5"
             />
         </div>
       </div>
