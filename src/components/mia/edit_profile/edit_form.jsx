@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 export default function EditForm(props) {
 //   const history = useHistory();
@@ -7,13 +7,34 @@ export default function EditForm(props) {
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
 
+  const router = useRouter();
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Submitting form with data:", { firstName, lastName, address });
     // handle form submission logic here
+    // 可以在这里添加代码，比如发送请求到服务器
+  // fetch('/api/submit-form', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ firstName, lastName, address }),
+  // })
+  // .then(response => response.json())
+  // .then(data => {
+  //   console.log('Success:', data);
+  //   // 处理成功，可以导航到其他页面
+  //   router.push('/profile');
+  // })
+  // .catch((error) => {
+  //   console.error('Error:', error);
+  // });
+
+    // router.push('/profile');
   };
 
   const handleCancel = () => {
-    // history.push("/new-page");
+    router.push('/profile');
   };
 
   return (

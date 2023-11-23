@@ -7,9 +7,18 @@ export default function Body() {
 
   // useEffect(() => {
   //   // Fetch from API and update rows state
-  //   fetch("API_URL")
-  //     .then((response) => response.json())
-  //     .then((data) => setRows(data));
+  //   fetch("YOUR_API_URL")
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => setRows(data))
+  //     .catch((error) => {
+  //       console.error('Error fetching data:', error);
+  //       // Handle the error here. For example, set an error state to show an error message.
+  //     });
   // }, []);
 
   // delete below when we have data available from APIa

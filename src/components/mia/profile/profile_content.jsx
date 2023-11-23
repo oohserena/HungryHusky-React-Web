@@ -1,11 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 export default function ProfileComponent(props) {
   const [rows, setRows] = useState([]);
   const [isAdmin, setIsAdmin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const router = useRouter();
+
+  const handleAdminInfo = () => {
+    router.push("/admin_view");
+  };
+
+  const handleEditProfile = () => {
+    router.push("/edit_profile");
+  };
 
   useEffect(() => {
     // Fetch data from external API
@@ -55,12 +65,12 @@ export default function ProfileComponent(props) {
                 <p className="relative shrink-0 box-border h-auto text-xl font-semibold ml-5 mt-5">
                   You are admin!&nbsp;
                 </p>
-                <Link
-                  to="/admin-info"
+                <button
+                  onClick={handleAdminInfo}
                   className="relative shrink-0 box-border appearance-none bg-blue-500 text-[white] rounded text-center cursor-pointer text-xl ml-5 mr-auto mt-5 px-6 py-4"
                 >
                   Admin Info
-                </Link>
+                </button>
               </div>
             )}
             {isLoggedIn && (
@@ -71,12 +81,12 @@ export default function ProfileComponent(props) {
                 <p className="relative shrink-0 box-border h-auto text-xl font-semibold mt-8 mb-auto mx-auto">
                   email: elonmusk@gmail.com <br />
                 </p>
-                <Link
-                  to="/edit-profile"
+                <button
+                  onClick={handleEditProfile}
                   className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl border mt-12 mb-52 mx-auto px-6 py-4 border-solid border-white"
                 >
                   Edit profile
-                </Link>
+                </button>
               </>
             )}
           </header>

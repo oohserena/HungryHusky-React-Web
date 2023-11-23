@@ -8,6 +8,14 @@ export default function NavigationBar(props) {
     if (label === "Home") {
       router.push('/');
     }
+
+    if (label === "Logout") {
+      router.push('/');
+    }
+
+    if (label === "Login") {
+      router.push('/login');
+    }
     
     // Add your logic here
   };
