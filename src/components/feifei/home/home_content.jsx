@@ -119,10 +119,27 @@ function HomeComponent(props) {
     router.push(`/search_detail`);
   };
 
+  //need to move somee logic to clent.js
+  // const handleButtonClick = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const restaurantFound = await findRestaurant();
+  //     if (restaurantFound) {
+  //       router.push(`/search_detail`);
+  //     } else {
+  //       router.push(`/no_result_search`);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during restaurant search:', error);
+  //   }
+  // };
+
   const renderRecentReviewColumns = () => {
     const handleReviewNav = (restaurantId) => {
-      router.push(`/restaurant_info/${restaurantId}`);
+      //router.push(`/restaurant_info/${restaurantId}`);
+      router.push(`/search_detail`);
     };
+    const totalReviews = recentActivityData.length;
     return recentReviewData.map((review) => (
       <div
         key={review.id}
@@ -261,7 +278,9 @@ function HomeComponent(props) {
             <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
               <div className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5">
                 Your Recent Review
+                <div className="total-reviews">Total: {recentReviewData.length}</div>
               </div>
+
               <div className="relative shrink-0 box-border flex-col flex mt-5 mx-6">
                 <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                   {renderRecentReviewColumns()}

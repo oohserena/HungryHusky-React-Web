@@ -49,7 +49,11 @@ function RegisterForm(props) {
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: checked }));
+    setFormData((prevData) => ({ 
+      ...prevData,
+      businessOwner: name === 'businessOwner' ? checked : false,
+      foodie: name === 'foodie' ? checked : false
+    }));
   };
 
   const handleSubmit = (e) => {
