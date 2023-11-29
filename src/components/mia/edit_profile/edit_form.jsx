@@ -1,25 +1,55 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as client from "../../client.js";
+import { useEffect } from "react";
+
+
+
 
 export default function EditForm(props) {
-//   const history = useHistory();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [address, setAddress] = useState("");
+  const [user, setUser] = useState({});
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // handle form submission logic here
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+  const fetchUser = async () => {
+    try {
+      const user = await client.findUserById(id);
+      // const currentUser = await client.findCurrentUser(id);
+      // if (currentUser.id !== user.id) router.push('/profile');
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setUser(user);
+    }
+    catch (err) {
+      router.push('/profile');
+    }
   };
 
   const handleCancel = () => {
-    // history.push("/new-page");
+    router.push('/profile');
   };
+
+  const handleSave = async () => {
+    event.preventDefault();
+    user.firstName = firstName;
+    user.lastName = lastName;
+    await client.updateUser(user);
+    router.push('/profile');
+  };
+
+
+  useEffect(() => {
+    fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form
       className="flex flex-col items-center justify-center relative shrink-0 box-border h-auto bg-white min-h-[311px] grow-0"
-      onSubmit={handleSubmit}
     >
       <label htmlFor="firstName" className="mt-2.5">
         <span className="text-2xl pl-0">
@@ -30,7 +60,7 @@ export default function EditForm(props) {
           id="firstName"
           name="firstName"
           type="text"
-          placeholder="Jane"
+          placeholder="First Name"
           className="border min-h-[40px] mt-2.5 border-solid border-neutral-400"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
@@ -48,28 +78,10 @@ export default function EditForm(props) {
           id="lastName"
           name="lastName"
           type="text"
-          placeholder="Doe"
+          placeholder="Last Name"
           className="border min-h-[40px] mt-2.5 border-solid border-neutral-400"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          required
-        />
-      </label>
-      <label htmlFor="address" className="text-base mt-2.5">
-        <span>
-          <strong>
-            <span className="text-2xl">Address</span>
-          </strong>
-        </span>
-        <br />
-        <input
-          id="address"
-          name="address"
-          type="text"
-          placeholder="Your new address"
-          className="border min-h-[40px] mt-2.5 border-solid border-neutral-400"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
           required
         />
       </label>
@@ -79,6 +91,7 @@ export default function EditForm(props) {
             <div className="flex flex-col items-stretch w-6/12 max-md:w-full max-md:ml-0">
               <button
                 type="submit"
+                onClick={handleSave}
                 className="relative shrink-0 box-border appearance-none bg-blue-500 text-[white] rounded text-center cursor-pointer text-xl font-semibold w-[200px] mt-5 mx-auto px-6 py-4"
               >
                 Save

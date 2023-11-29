@@ -1,33 +1,32 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import * as client from "../../client.js";
+
+
 
 export default function Body() {
   const columns = ["UserId", "First Name", "Last Name", "Email"];
-  const [rows, setRows] = useState([]);
+  
+  // const [role, setRole] = useState("USER"); // ["Foodie", "Admin", "Business Analyst"]
+  // const [user, setUser] = useState({
+  //   email: "",
+  //   password: "",
+  //   role: "Foodie",
+  // });
 
-  // useEffect(() => {
-  //   // Fetch from API and update rows state
-  //   fetch("API_URL")
-  //     .then((response) => response.json())
-  //     .then((data) => setRows(data));
-  // }, []);
+  const [rows, setRows] = useState([]);  
+  const fetchUsers = async () => {
+    const users = await client.findAllUsers();
+    const formattedRows = users.map((user) => {
+      return [user._id, user.firstName, user.lastName, user.email];
+    });
+    setRows(formattedRows);
+  };
 
-  // delete below when we have data available from APIa
-  const t_rows = [
-    ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3", "Row 1, Col 4"],
-    ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3", "Row 2, Col 4"],
-    ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3", "Row 3, Col 4"],
-    ["Row 4, Col 1", "Row 4, Col 2", "Row 4, Col 3", "Row 4, Col 4"],
-    ["Row 5, Col 1", "Row 5, Col 2", "Row 5, Col 3", "Row 5, Col 4"],
-    ["Row 6, Col 1", "Row 6, Col 2", "Row 6, Col 3", "Row 6, Col 4"],
-    ["Row 7, Col 1", "Row 7, Col 2", "Row 7, Col 3", "Row 7, Col 4"],
-    ["Row 8, Col 1", "Row 8, Col 2", "Row 8, Col 3", "Row 8, Col 4"],
-    ["Row 9, Col 1", "Row 9, Col 2", "Row 9, Col 3", "Row 9, Col 4"],
-    ["Row 10, Col 1", "Row 10, Col 2", "Row 10, Col 3", "Row 10, Col 4"],
-  ]
   useEffect(() => {
-    setRows(t_rows);
+    fetchUsers();
   }, []);
+
 
   const handleRowClick = (userId) => {
     // Handle row click event

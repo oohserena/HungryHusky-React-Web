@@ -17,19 +17,16 @@ export default function ReviewComponent(props) {
           restaurantName: "Restaurant Name",
           review:
             "It was okay. The carnitas tacos didn't really have much flavor and the carbs Asada taco had gristle and fat. I was expecting refried beans.",
-          rate: 5.0,
         },
         {
           restaurantName: "Restaurant Name",
           review:
             "It was okay. The carnitas tacos didn't really have much flavor and the carbs Asada taco had gristle and fat. I was expecting refried beans.",
-          rate: 5.0,
         },
         {
           restaurantName: "Restaurant Name",
           review:
             "It was okay. The carnitas tacos didn't really have much flavor and the carbs Asada taco had gristle and fat. I was expecting refried beans.",
-          rate: 5.0,
         },
       ];
       setReviews(reviews);
@@ -81,17 +78,7 @@ export default function ReviewComponent(props) {
                   {review.review}
                 </p>
               </div>
-              <div className="relative shrink-0 box-border h-auto ml-5 mt-5">
-                <p
-                  style={{
-                    color: "rgb(51, 51, 51)",
-                    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
-                    fontSize: "18px",
-                  }}
-                >
-                  <b>Rate: {review.rate}</b>
-                </p>
-              </div>
+           
               <button
                 className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl mt-5 mx-auto px-6 py-4"
                 onClick={() => handleDeleteReview(index)}
