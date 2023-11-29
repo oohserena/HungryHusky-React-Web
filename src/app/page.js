@@ -11,6 +11,7 @@ import AnalyticsSearch from "@/components/serena/search_analytics";
 import WriteReview from "@/components/serena/write_review";
 import SearchNoResults from "@/components/serena/search_no_results";
 import { BrowserRouter, Route, Switch} from "react-router-dom";
+import HomeComponent from "@/components/feifei/home/home_content";
 
 
 export default function Home() {
@@ -18,12 +19,7 @@ export default function Home() {
   return (
    
       <BrowserRouter>
-        <Switch>
-          <Route path='/foodie_search' component={FoodieSearch} />
-          <Route path='/analytics_search' component={AnalyticsSearch} />
-          <Route path='/search_detail' component={SearchDetail} />
-          <Route path='/write_review' component={WriteReview} />
-        </Switch>
+        <HomeSrceen />
       </BrowserRouter>
  
   );
