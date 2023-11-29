@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import * as client from "./client";
+import * as client from "../../client.js";
 
 function LoginForm(props) {
   const router = useRouter();
@@ -13,14 +13,16 @@ function LoginForm(props) {
     event.preventDefault();
     try {
       const credentials = { email: email, password: password };
-      const user = await client.loginUser(credentials);
-      // Handle the response from the backend API
+      const user = await client.login(credentials);
       router.push('/');
       console.log(user);
     } catch (error) {
-      // Handle any errors that occurred during the request
-      alert(error.message);
-      setError(error.message);
+      let errorMessage = 'Something went wrong. Please try again later';
+      if (error.response && error.response.status === 401) {
+        errorMessage = 'Wrong email or password. Please try again'; 
+      }
+      alert(errorMessage);
+      setError(errorMessage);
       console.error(error);
     }
   }
@@ -30,7 +32,6 @@ function LoginForm(props) {
   };
 
   const handleSignUpClick = () => {
-    // Add logic 
     router.push('/register');
   };
 
@@ -45,7 +46,7 @@ function LoginForm(props) {
             Log in to XX
           </h1>
           <br />
-          {error && <div className="alert alert-danger mb-2 mt-2">{error}</div>}
+          {error && <div className="alert alert-danger mb-2 mt-2 font-italic text-center">{error}</div>}
           <br />
           <form onSubmit={handleLogIn} className="flex flex-col gap-5">
             <input

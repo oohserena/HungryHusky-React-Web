@@ -20,3 +20,8 @@ export const updateUser = async (user) => {
   const response = await request.put(`${USERS_API}/${user._id}`, user);
   return response.data;
 };
+
+export const login = async (credentials) => {
+  const response = await request.post(`${USERS_API}`, credentials);
+  return response.data;
+};
