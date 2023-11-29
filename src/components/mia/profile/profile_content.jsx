@@ -14,7 +14,7 @@ export default function ProfileComponent(props) {
   };
 
   const handleEditProfile = () => {
-    router.push("/edit_profile");
+    router.push("/edit_profile?id=65580756fed6bb3b501c55f2");
   };
 
   useEffect(() => {
