@@ -25,3 +25,8 @@ export const login = async (credentials) => {
   const response = await request.post(`${USERS_API}`, credentials);
   return response.data;
 };
+
+export const register = async (credentials) => {
+  const response = await request.post(`${USERS_API}`, credentials);
+  return response.data;
+};
