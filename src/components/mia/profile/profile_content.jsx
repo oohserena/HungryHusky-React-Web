@@ -2,12 +2,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useRouter } from "next/navigation";
+import * as client from "../../client.js";
+import { useSearchParams } from "next/navigation";
+
 
 export default function ProfileComponent(props) {
   const [rows, setRows] = useState([]);
   const [isAdmin, setIsAdmin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const router = useRouter();
+
+  
 
   const handleAdminInfo = () => {
     router.push("/admin_view");
@@ -46,6 +54,24 @@ export default function ProfileComponent(props) {
     setIsLoggedIn(true);
   }, []);
 
+
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("id");
+  useEffect(() => {
+    // `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}`
+    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/65580756fed6bb3b501c55f2`)
+      .then(response => response.json())
+      .then(data => {
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setEmail(data.email);
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+      });
+  }, []); 
+
+
   return (
     <section className="flex flex-col relative shrink-0 box-border bg-white pt-12 pb-24 px-8 border-solid border-neutral-400">
       <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
@@ -76,10 +102,10 @@ export default function ProfileComponent(props) {
             {isLoggedIn && (
               <>
                 <h2 className="relative shrink-0 box-border h-auto text-3xl font-black mt-36 mb-auto mx-auto">
-                  Elon Musk
+                {`${firstName} ${lastName}`}
                 </h2>
                 <p className="relative shrink-0 box-border h-auto text-xl font-semibold mt-8 mb-auto mx-auto">
-                  email: elonmusk@gmail.com <br />
+                {email} <br />
                 </p>
                 <button
                   onClick={handleEditProfile}
