@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function ProfileComponent(props) {
   const [rows, setRows] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -47,14 +47,8 @@ export default function ProfileComponent(props) {
 
   }, []);
 
-  useEffect(() => {
-    // Check if user admin and logged in
-    // Replace the condition with your own logic
-    setIsAdmin(true);
-    setIsLoggedIn(true);
-  }, []);
 
-
+  const adminIds = ['65580756fed6bb3b501c55f2', '654f9ec2ea7ead465908d1e3'];
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
   useEffect(() => {
@@ -62,14 +56,20 @@ export default function ProfileComponent(props) {
     fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/65580756fed6bb3b501c55f2`)
       .then(response => response.json())
       .then(data => {
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setEmail(data.email);
+        if (data.error === 'User not found') {
+          setIsLoggedIn(false);
+          setIsAdmin(false);
+        } else {
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
+          setEmail(data.email);
+          setIsAdmin(data.role === 'ADMIN');
+        }
       })
       .catch(error => {
         console.error('Error fetching user data:', error);
       });
-  }, []); 
+  }, [userId]); 
 
 
   return (
