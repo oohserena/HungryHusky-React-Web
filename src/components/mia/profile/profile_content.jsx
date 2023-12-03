@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import * as client from "../../client.js";
 import { useSearchParams } from "next/navigation";
 
@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 export default function ProfileComponent(props) {
   const [rows, setRows] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isEditable, setIsEditable] = useState(true);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,28 +47,71 @@ export default function ProfileComponent(props) {
 
   }, []);
 
-
-  const adminIds = ['65580756fed6bb3b501c55f2', '654f9ec2ea7ead465908d1e3'];
   const searchParams = useSearchParams();
-  const userId = searchParams.get("id");
+  // const userId = searchParams.get("id");
+  const params = useParams();
+  const userId = params.id;
+  let currentUserId = undefined;
+
+
   useEffect(() => {
-    // `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}`
-    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/65580756fed6bb3b501c55f2`)
+    // /api/users/current
+    // fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/current`)
+    //   .then(response => response.json())
+    //   .then(data => {  
+    //     currentUserId = data._id;
+    //     setIsAdmin(data.isAdmin);
+    //      setFirstName(data.firstName);
+    //      setLastName(data.lastName);
+          // setEmail(data.email);
+          // setIsAdmin(data.role === 'ADMIN');
+    //   }
+
+
+    const loggedIn = currentUserId !== undefined
+    const hasUserId = userId !== undefined
+    const same_user = currentUserId === userId
+
+    // profile page
+    if (!hasUserId) {
+      if (loggedIn) {
+        // fetch user
+        setIsEditable(true);
+      } else {
+        router.push('/login');
+      }
+    // profile/id page
+    } else {
+      if (loggedIn && same_user) {
+        router.push('/profile');
+      } else if (loggedIn && !same_user) {
+        setIsAdmin(false);
+        setIsEditable(true);
+      } else if (!loggedIn) {
+        setIsAdmin(false);
+        setIsEditable(false);
+      }
+      
+      fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}`)
       .then(response => response.json())
       .then(data => {
         if (data.error === 'User not found') {
-          setIsLoggedIn(false);
-          setIsAdmin(false);
+          
+          router.push('/login');
         } else {
           setFirstName(data.firstName);
           setLastName(data.lastName);
           setEmail(data.email);
-          setIsAdmin(data.role === 'ADMIN');
         }
-      })
-      .catch(error => {
-        console.error('Error fetching user data:', error);
-      });
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+      setIsAdmin(true);
+      setIsEditable(true);
+    }
+    
+
   }, [userId]); 
 
 
@@ -86,7 +129,7 @@ export default function ProfileComponent(props) {
                 </span>
               </strong>
             </h1>
-            {isAdmin && isLoggedIn && (
+            {isAdmin && isEditable && (
               <div className="flex flex-col relative shrink-0 box-border h-[200px] mt-5">
                 <p className="relative shrink-0 box-border h-auto text-xl font-semibold ml-5 mt-5">
                   You are admin!&nbsp;
@@ -99,12 +142,12 @@ export default function ProfileComponent(props) {
                 </button>
               </div>
             )}
-            {isLoggedIn && (
-              <>
-                <h2 className="relative shrink-0 box-border h-auto text-3xl font-black mt-36 mb-auto mx-auto">
+            <h2 className="relative shrink-0 box-border h-auto text-3xl font-black mt-36 mb-auto mx-auto">
                 {`${firstName} ${lastName}`}
                 </h2>
-                <p className="relative shrink-0 box-border h-auto text-xl font-semibold mt-8 mb-auto mx-auto">
+            {isEditable && (
+              <>
+              <p className="relative shrink-0 box-border h-auto text-xl font-semibold mt-8 mb-auto mx-auto">
                 {email} <br />
                 </p>
                 <button
