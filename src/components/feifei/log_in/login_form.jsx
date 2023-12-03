@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect }from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as client from "../../client.js";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { setCurrentUser } from "../../common/reducer.js";
 
 function LoginForm(props) {
@@ -11,7 +11,15 @@ function LoginForm(props) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.currentUser);
   
+  useEffect(() => {
+    if (currentUser) {
+      router.push('/');
+      return;
+    }
+  }, [currentUser, router]);
+
   const handleLogIn = async (event) => {
     event.preventDefault();
     try {

@@ -7,11 +7,9 @@ import { setCurrentUser } from "../../common/reducer.js";
 
 function HomeComponent(props) {
   const router = useRouter();
-  const currentUser = useSelector(state => state.currentUser);
-  const dispatch = useDispatch();
-  //const updateCurrentUser = (user) => {dispatch(setCurrentUser(user));};
+  const { currentUser } = useSelector((state) => state.userReducer);
+  console.log("currentUser:", currentUser);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   // ADD BACK when api ready
   const [recentReviewData, setRecentReviewData] = useState([]);
   const [recentActivityData, setRecentActivityData] = useState([]);
@@ -83,8 +81,6 @@ function HomeComponent(props) {
   //     imageSrc: "https://via.placeholder.com/150?text=Japanese+Food",
   //   },
   // ]);
-
-  // ADD BACK when api ready
 
   useEffect(() => {
     const fetchRecentReviewData = async () => {
@@ -279,7 +275,7 @@ function HomeComponent(props) {
         </div>
       </section>
       
-      {/* currentUser:{JSON.stringify(currentUser)} */}
+      currentUser: {JSON.stringify(currentUser)}
 
       {currentUser && (
         <section className="flex flex-col relative shrink-0 box-border my-5">
