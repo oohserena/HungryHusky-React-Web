@@ -2,18 +2,22 @@ import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as client from "../../client.js";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../../common/reducer.js";
 
 function LoginForm(props) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
   
   const handleLogIn = async (event) => {
     event.preventDefault();
     try {
       const credentials = { email: email, password: password };
       const user = await client.login(credentials);
+      dispatch(setCurrentUser(user));
       router.push('/');
       console.log(user);
     } catch (error) {

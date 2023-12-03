@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as client from "../../client.js";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../../common/reducer.js";
 
 function RegisterForm(props) {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -88,7 +91,8 @@ function RegisterForm(props) {
         role = "DefaultRole"; 
       }
       const credentials = { firstName, lastName, email, password, role};
-      await client.register(credentials);
+      const user = await client.register(credentials);
+      dispatch(setCurrentUser(user));
       router.push('/'); 
     } catch (error) {
       console.error("Registration failed:", error);
