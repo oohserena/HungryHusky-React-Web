@@ -46,7 +46,7 @@ export const register = async (credentials) => {
   return response.data;
 };
 
-//need add to nav bar
+
 export const logout = async () => {
   const response = await request.post(`${USERS_API}`);
   return response.data;
@@ -56,3 +56,7 @@ export const account = async () => {
   const response = await request.get(`${USERS_API}/65580756fed6bb3b501c55f2`);
   return response.data;
 };
+export const findReviewsByUserId = async (id) => {
+  const response = await request.get(`${USERS_API}/${id}/reviews`);
+  return response.data;
+}
