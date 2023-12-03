@@ -16,7 +16,7 @@ function CurrentUser({ children }) {
   useEffect(() => {
     fetchCurrentUser();
   }, []);
-  
+
   return <>{!loading && children}</>;
 }
 
