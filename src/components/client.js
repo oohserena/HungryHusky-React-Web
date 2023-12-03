@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const request = axios.create({
   withCredentials: true,
 });
@@ -38,6 +39,7 @@ export const searchRestaurants = async (term, location) => {
 export const RestaurantDetail = async (id) => {
   console.log(`${RESTAURANT_API}/${id}`)
   const response = await request.get(`${RESTAURANT_API}/${id}`);
+}
 
 export const register = async (credentials) => {
   const response = await request.post(`${USERS_API}`, credentials);
