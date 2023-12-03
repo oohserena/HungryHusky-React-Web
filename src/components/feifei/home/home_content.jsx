@@ -10,88 +10,35 @@ function HomeComponent(props) {
   const { currentUser } = useSelector((state) => state.userReducer);
   console.log("currentUser:", currentUser);
 
-  // ADD BACK when api ready
   const [recentReviewData, setRecentReviewData] = useState([]);
   const [recentActivityData, setRecentActivityData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
   const [error, setError] = useState(null);
   const [term, setTerm] = useState('');
   const [ location, setLocation ] = useState('');
-  // DELETE when api ready, test data for rendering,
-  // const [recentReviewData, setRecentReviewData] = useState([
-  //   {
-  //     id: 1,
-  //     restaurantName: "Burger Queen",
-  //     restaurantId: "BurgerQueen1",
-  //     imageSrc: "https://via.placeholder.com/150",
-  //     reviewText: "Delicious burgers with amazing sauce!",
-  //   },
-  //   {
-  //     id: 2,
-  //     restaurantName: "Pizza Tower",
-  //     restaurantId: "PizzaTower1",
-  //     imageSrc: "https://via.placeholder.com/150",
-  //     reviewText: "Best pizza in town, hands down!",
-  //   },
-  // ]);
-
-  // const [recentActivityData, setRecentActivityData] = useState([
-  //   {
-  //     id: 1,
-  //     foodieName: "Alice",
-  //     userId: "Alice1",
-  //     imageSrc: "https://via.placeholder.com/100",
-  //     reviewInfo: "Loved the pancakes here!",
-  //   },
-  //   {
-  //     id: 2,
-  //     foodieName: "Bob",
-  //     userId: "Bob1",
-  //     imageSrc: "https://via.placeholder.com/100",
-  //     reviewInfo: "Not a fan of the waffles.",
-  //   },
-  //   {
-  //     id: 3,
-  //     foodieName: "Charlie",
-  //     userId: "Charlie1",
-  //     imageSrc: "https://via.placeholder.com/100",
-  //     reviewInfo: "The brunch menu is fantastic!",
-  //   },
-  // ]);
-
-  // const [categoriesData, setCategoriesData] = useState([
-  //   {
-  //     id: 1,
-  //     name: "Chinese",
-  //     imageSrc: "https://via.placeholder.com/150?text=Chinese+Food",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Thai",
-  //     imageSrc: "https://via.placeholder.com/150?text=Thai+Food",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Mexican",
-  //     imageSrc: "https://via.placeholder.com/150?text=Mexican+Food",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Japanese",
-  //     imageSrc: "https://via.placeholder.com/150?text=Japanese+Food",
-  //   },
-  // ]);
-
+  
   useEffect(() => {
-    const fetchRecentReviewData = async () => {
-      try {
-        const response = await fetch("API_URL");
-        const data = await response.json();
-        setRecentReviewData(data);
-      } catch (error) {
-        setError(error);
+    const fetchUserReviews = async () => {
+      if (currentUser && currentUser._id) {
+        try {
+          const userReviews = await client.findReviewsByUserId(currentUser._id);
+          setRecentReviewData(userReviews);
+        } catch (error) {
+          console.error('Error fetching user reviews:', error);
+          setError(error);
+        }
       }
     };
+
+    // const fetchRecentReviewData = async () => {
+    //   try {
+    //     const response = await fetch("API_URL");
+    //     const data = await response.json();
+    //     setRecentReviewData(data);
+    //   } catch (error) {
+    //     setError(error);
+    //   }
+    // };
 
     const fetchRecentActivityData = async () => {
       try {
@@ -113,10 +60,13 @@ function HomeComponent(props) {
       }
     };
 
-    fetchRecentReviewData();
+    if (currentUser && currentUser._id) {
+      fetchUserReviews();
+    }
+
     fetchRecentActivityData();
     fetchCategoriesData();
-  }, []);
+  }, [currentUser]);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -136,11 +86,13 @@ function HomeComponent(props) {
   };
 
   const renderRecentReviewColumns = () => {
+    const reviewId = currentUser.review_ids;
+    console.log("reviewId:", reviewId);
     const handleReviewNav = (restaurantId) => {
       //router.push(`/restaurant_info/${restaurantId}`);
-      router.push(`/search_detail`);
+      router.push(`/search_detail/${restaurantId}`);
     };
-    const totalReviews = recentActivityData.length;
+
     return recentReviewData.map((review) => (
       <div
         key={review.id}
@@ -276,6 +228,8 @@ function HomeComponent(props) {
       </section>
       
       currentUser: {JSON.stringify(currentUser)}
+      <br />
+      currentReview: {JSON.stringify(currentUser)}
 
       {currentUser && (
         <section className="flex flex-col relative shrink-0 box-border my-5">
