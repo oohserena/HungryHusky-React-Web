@@ -19,7 +19,6 @@ function HomeComponent(props) {
   const [error, setError] = useState(null);
   const [term, setTerm] = useState('');
   const [ location, setLocation ] = useState('');
-
   // DELETE when api ready, test data for rendering,
   // const [recentReviewData, setRecentReviewData] = useState([
   //   {
@@ -123,10 +122,9 @@ function HomeComponent(props) {
     fetchCategoriesData();
   }, []);
 
-
   const handleButtonClick = (e) => {
     e.preventDefault();
-    router.push('/search_detail');
+    router.push(`/search_detail`);
   };
 
   const handleSearch = async (e) => {
@@ -140,27 +138,6 @@ function HomeComponent(props) {
       setError(error);
     }
   };
-
-  //need to move somee logic to clent.js
-  // const handleButtonClick = async (e) => {
-  //   e.preventDefault();
-  //   router.push(`/search_detail`);
-  // };
-
-  //need to move some logic to clent.js
-  //const handleButtonClick = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const restaurantFound = await findRestaurant();
-  //     if (restaurantFound) {
-  //       router.push(`/search_detail`);
-  //     } else {
-  //       router.push(`/no_result_search`);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error during restaurant search:', error);
-  //   }
-  // };
 
   const renderRecentReviewColumns = () => {
     const handleReviewNav = (restaurantId) => {
