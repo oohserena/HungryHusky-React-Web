@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import { useRouter } from "next/navigation";
+import * as client from "../../client.js";
 
 function HomeComponent(props) {
   const router = useRouter();
@@ -10,6 +12,8 @@ function HomeComponent(props) {
   //const [recentActivityData, setRecentActivityData] = useState([]);
   //const [categoriesData, setCategoriesData] = useState([]);
   const [error, setError] = useState(null);
+  const [term, setTerm] = useState('');
+  const [ location, setLocation ] = useState('');
 
   // DELETE when api ready, test data for rendering,
   const [recentReviewData, setRecentReviewData] = useState([
@@ -116,7 +120,19 @@ function HomeComponent(props) {
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    router.push(`/search_detail`);
+    router.push('/search_detail');
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+    //   const response = await client.searchRestaurants(term, location);
+      // Handle the search result. For example, you can redirect to a search results page.
+      router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+      setError(error);
+    }
   };
 
   //need to move somee logic to clent.js
@@ -240,13 +256,14 @@ function HomeComponent(props) {
                 <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                   <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
                     <form
-                      onSubmit={handleButtonClick}
+                      onSubmit={handleSearch}
                       className="w-full max-w-xs mx-auto space-y-5"
                     >
                       <input
                         type="text"
                         placeholder="Restaurant Name"
                         name="search-input-restaurants"
+                        onChange={(e) => setTerm(e.target.value)}
                         className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
                         required={false}
                       />
@@ -254,6 +271,7 @@ function HomeComponent(props) {
                         type="text"
                         placeholder="Seattle, WA 98104"
                         name="search-input-zipcode"
+                        onChange={(e) => setLocation(e.target.value)}
                         className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
                         required={false}
                       />

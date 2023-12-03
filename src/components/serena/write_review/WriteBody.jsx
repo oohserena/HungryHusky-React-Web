@@ -1,6 +1,7 @@
 'use client';
 import * as React from "react";
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function WriteBody(props) {
   const [review, setReview] = React.useState("");
@@ -12,7 +13,6 @@ export default function WriteBody(props) {
 
   const handlePostReview = () => {
     router.push('/search_detail');
-    
   };
 
   const handleCancel = () => {

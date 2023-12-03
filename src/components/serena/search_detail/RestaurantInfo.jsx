@@ -1,12 +1,35 @@
 
 'use client';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import { useRouter } from 'next/navigation';
+import * as client from '../../client.js';
+import { useSearchParams } from "react-router-dom";
+import Image from 'next/image';
 
-export default function RestaurantInfo(props) {
+export default function RestaurantInfo({restaurantId}) {
  
   const router = useRouter();
+  const [restaurant, setRestaurant] = useState(null);
+
+  useEffect(() => {
+    if (restaurantId) {
+      fetchRestaurant(restaurantId);
+    }
+  }, [restaurantId]);
+
+  const fetchRestaurant = async (restaurantId) => {
+    try {
+      const response = await client.RestaurantDetail(restaurantId);
+      console.log('setting rest')
+      setRestaurant(response);
+    } catch (error) {
+      console.error('Error fetching restaurant detail:', error);
+    }
+  }
+
+  
+
   const handleButtonClick = () => {
     // handle button click event here
     router.push('/write_review');
@@ -17,26 +40,41 @@ export default function RestaurantInfo(props) {
       <header className="flex flex-col relative shrink-0 box-border mt-2.5 pl-5 pr-52">
       <div className="flex items-center">
         <h1 className="relative title-margin font-semibold text-4xl mt-5 max-sm:w-[500px] max-sm:mx-auto">
-          Din Tai Fung
+          {restaurant ? restaurant.name: 'Loading...'}
         </h1>
-        <div className="flex-shrink-0 box-border image-margin h-[150px] w-[500px]">
-            <img
-              loading="lazy"
-              srcSet="https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=100 100w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=200 200w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=400 400w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=800 800w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=1200 1200w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=1600 1600w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51?width=2000 2000w, https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2F0341e66523c347e38d301d6bd0abaa51"className="aspect-[1.51] object-cover object-center w-full shrink-0 box-border min-w-[20px] overflow-hidden mt-5"
-              // className="object-cover w-500 h-50 shrink-0 box-border min-w-[20px] overflow-hidden mt-5"
-            />
-        </div>
+        {/* {restaurant && restaurant.photos && (
+            <div className="flex-shrink-0 box-border image-margin h-[150px] w-[500px]">
+              <Image 
+                src={restaurant.photos[0]} // Assuming the first photo is to be displayed
+                alt={`Image of ${restaurant.name}`} 
+                layout="fill" 
+                objectFit="cover" 
+              />
+              <Image 
+                src={restaurant.photos[1]} // Assuming the first photo is to be displayed
+                alt={`Image of ${restaurant.name}`} 
+                layout="fill" 
+                objectFit="cover" 
+              />
+              <Image 
+                src={restaurant.photos[2]} // Assuming the first photo is to be displayed
+                alt={`Image of ${restaurant.name}`} 
+                layout="fill" 
+                objectFit="cover" 
+              />
+            </div>
+          )} */}
       </div>
         <div className="flex flex-col relative shrink-0 box-border h-[30px] w-[600px] mt-5">
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
             <div className="flex flex-col items-stretch w-6/12 max-md:w-full max-md:ml-0">
               <p className="relative shrink-0 box-border text-lg font-semibold ml-36 max-sm:ml-2.5 max-sm:mr-auto">
-                Rating: 4.2
+                Rating: {restaurant ? restaurant.rating: 'Loading...'}
               </p>
             </div>
             <div className="flex flex-col items-stretch w-6/12 ml-5 max-md:w-full max-md:ml-0">
               <p className="relative shrink-0 box-border h-auto text-lg font-semibold -ml-0.5 max-sm:ml-1.5 max-sm:mr-auto max-sm:mt-2.5">
-                (2,169 reviews)
+                ({restaurant ? restaurant.review_count : '0'} reviews)
               </p>
             </div>
           </div>
@@ -51,8 +89,26 @@ export default function RestaurantInfo(props) {
                 Write a review
               </button>
             </div>
+            
           </div>
+
+          
+          
         </div>
+        {restaurant && restaurant.photos && (
+          <div className="flex flex-row shrink-0 gap-2 mt-5 md:mt-0 image-margin">
+            {restaurant.photos.slice(0, 3).map((photo, index) => (
+              <div key={index} className="w-[300px] h-[200px] relative">
+                <Image 
+                  src={photo} 
+                  alt={`Image ${index + 1} of ${restaurant.name}`} 
+                  layout="fill" 
+                  objectFit="cover" 
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </header>
      
     </section>

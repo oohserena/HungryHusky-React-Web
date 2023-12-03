@@ -5,6 +5,7 @@ const request = axios.create({
 
 export const BASE_API = process.env.NEXT_PUBLIC_BASE_API_URL;
 export const USERS_API = `${BASE_API}/api/users`;
+export const RESTAURANT_API = `${BASE_API}/api/businesses`
 
 export const findAllUsers = async () => {
   const response = await request.get(`${USERS_API}`);
@@ -25,6 +26,18 @@ export const login = async (credentials) => {
   const response = await request.post(`${USERS_API}`, credentials);
   return response.data;
 };
+
+
+export const searchRestaurants = async (term, location) => {
+  const response = await request.get(`${RESTAURANT_API}/search`, {
+    params: { term, location }
+  });
+  return response.data;
+};
+
+export const RestaurantDetail = async (id) => {
+  console.log(`${RESTAURANT_API}/${id}`)
+  const response = await request.get(`${RESTAURANT_API}/${id}`);
 
 export const register = async (credentials) => {
   const response = await request.post(`${USERS_API}`, credentials);
