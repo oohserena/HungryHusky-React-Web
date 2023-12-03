@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
+import * as client from "../../client.js";
 
 function RegisterForm(props) {
-  //const navigate = useNavigate();
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -11,7 +10,7 @@ function RegisterForm(props) {
     lastName: "",
     email: "",
     password: "",
-    businessOwner: false,
+    businessAnalyst: false,
     foodie: false,
   });
 
@@ -44,26 +43,59 @@ function RegisterForm(props) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === "FirstName") {
+      setFormData((prevData) => ({
+        ...prevData,
+        firstName: value,
+      }));
+    } else if (name === "LastName") {
+      setFormData((prevData) => ({
+        ...prevData,
+        lastName: value,
+      }));
+    } else if (name === "email") {
+      setFormData((prevData) => ({
+        ...prevData,
+        email: value,
+      }));
+    } else if (name === "Password") {
+      setFormData((prevData) => ({
+        ...prevData,
+        password: value,
+      }));
+    }
   };
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setFormData((prevData) => ({ 
       ...prevData,
-      businessOwner: name === 'businessOwner' ? checked : false,
+      businessAnalyst: name === 'businessAnalyst' ? checked : false,
       foodie: name === 'foodie' ? checked : false
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    router.push('/');
+    try {
+      const { firstName, lastName, email, password, businessAnalyst, foodie } = formData;
+      let role;
+      if (businessAnalyst) {
+        role = "Business Analyst";
+      } else if (foodie) {
+        role = "Foodie";
+      } else {
+        role = "DefaultRole"; 
+      }
+      const credentials = { firstName, lastName, email, password, role};
+      await client.register(credentials);
+      router.push('/'); 
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
 
   const handleLoginClick = () => {
-    //navigate(`/login`);
     router.push('/login');
   };
 
@@ -96,13 +128,13 @@ function RegisterForm(props) {
             <div className="flex items-center mb-2">
               <input
                 type="checkbox"
-                id="businessOwner"
-                name="businessOwner"
+                id="businessAnalyst"
+                name="businessAnalyst"
                 className="mr-2"
-                checked={formData.businessOwner}
+                checked={formData.businessAnalyst}
                 onChange={handleCheckboxChange}
               />
-              <label htmlFor="businessOwner" className="text-lg">
+              <label htmlFor="businessAnalyst" className="text-lg">
                 Business Analyst
               </label>
             </div>
@@ -128,13 +160,6 @@ function RegisterForm(props) {
           </button>
           <p className="text-right mt-4">
             Already on XX? &nbsp;
-            {/* <a
-              href="#"
-              className="text-blue-500 hover:text-blue-700 transition duration-300"
-              onClick={handleLoginClick}
-            >
-              Log in
-            </a> */}
             <button
               type="button"
               className="text-blue-500 hover:text-blue-700 transition duration-300"

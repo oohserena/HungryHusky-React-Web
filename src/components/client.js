@@ -27,6 +27,7 @@ export const login = async (credentials) => {
   return response.data;
 };
 
+
 export const searchRestaurants = async (term, location) => {
   const response = await request.get(`${RESTAURANT_API}/search`, {
     params: { term, location }
@@ -37,5 +38,14 @@ export const searchRestaurants = async (term, location) => {
 export const RestaurantDetail = async (id) => {
   console.log(`${RESTAURANT_API}/${id}`)
   const response = await request.get(`${RESTAURANT_API}/${id}`);
+
+export const register = async (credentials) => {
+  const response = await request.post(`${USERS_API}`, credentials);
+  return response.data;
+};
+
+//need add to nav bar
+export const logout = async () => {
+  const response = await request.post(`${USERS_API}`);
   return response.data;
 };
