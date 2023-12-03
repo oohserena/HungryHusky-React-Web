@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import { useRouter } from "next/navigation";
+import * as client from "../../client.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentUser } from "../../common/reducer.js";
 
@@ -15,73 +17,8 @@ function HomeComponent(props) {
   const [recentActivityData, setRecentActivityData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
   const [error, setError] = useState(null);
-
-  // DELETE when api ready, test data for rendering,
-  // const [recentReviewData, setRecentReviewData] = useState([
-  //   {
-  //     id: 1,
-  //     restaurantName: "Burger Queen",
-  //     restaurantId: "BurgerQueen1",
-  //     imageSrc: "https://via.placeholder.com/150",
-  //     reviewText: "Delicious burgers with amazing sauce!",
-  //   },
-  //   {
-  //     id: 2,
-  //     restaurantName: "Pizza Tower",
-  //     restaurantId: "PizzaTower1",
-  //     imageSrc: "https://via.placeholder.com/150",
-  //     reviewText: "Best pizza in town, hands down!",
-  //   },
-  // ]);
-
-  // const [recentActivityData, setRecentActivityData] = useState([
-  //   {
-  //     id: 1,
-  //     foodieName: "Alice",
-  //     userId: "Alice1",
-  //     imageSrc: "https://via.placeholder.com/100",
-  //     reviewInfo: "Loved the pancakes here!",
-  //   },
-  //   {
-  //     id: 2,
-  //     foodieName: "Bob",
-  //     userId: "Bob1",
-  //     imageSrc: "https://via.placeholder.com/100",
-  //     reviewInfo: "Not a fan of the waffles.",
-  //   },
-  //   {
-  //     id: 3,
-  //     foodieName: "Charlie",
-  //     userId: "Charlie1",
-  //     imageSrc: "https://via.placeholder.com/100",
-  //     reviewInfo: "The brunch menu is fantastic!",
-  //   },
-  // ]);
-
-  // const [categoriesData, setCategoriesData] = useState([
-  //   {
-  //     id: 1,
-  //     name: "Chinese",
-  //     imageSrc: "https://via.placeholder.com/150?text=Chinese+Food",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Thai",
-  //     imageSrc: "https://via.placeholder.com/150?text=Thai+Food",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Mexican",
-  //     imageSrc: "https://via.placeholder.com/150?text=Mexican+Food",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Japanese",
-  //     imageSrc: "https://via.placeholder.com/150?text=Japanese+Food",
-  //   },
-  // ]);
-
-  // ADD BACK when api ready
+  const [term, setTerm] = useState('');
+  const [ location, setLocation ] = useState('');
 
   useEffect(() => {
     const fetchRecentReviewData = async () => {
@@ -119,23 +56,36 @@ function HomeComponent(props) {
     fetchCategoriesData();
   }, []);
 
-  // const handleButtonClick = (e) => {
-  //   e.preventDefault();
-  //   router.push(`/search_detail`);
-  // };
 
   //need to move some logic to clent.js
-  const handleButtonClick = async (e) => {
+  // const handleButtonClick = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const restaurantFound = await findRestaurant();
+  //     if (restaurantFound) {
+  //       router.push(`/search_detail`);
+  //     } else {
+  //       router.push(`/no_result_search`);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during restaurant search:', error);
+  //   }
+  // };
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    router.push(`/search_detail`);
+    router.push('/search_detail');
+  };
+
+  const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const restaurantFound = await findRestaurant();
-      if (restaurantFound) {
-        router.push(`/search_detail`);
-      } else {
-        router.push(`/no_result_search`);
-      }
+    //   const response = await client.searchRestaurants(term, location);
+      // Handle the search result. For example, you can redirect to a search results page.
+      router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
     } catch (error) {
-      console.error('Error during restaurant search:', error);
+      console.error('Error fetching restaurants:', error);
+      setError(error);
     }
   };
 
@@ -245,13 +195,14 @@ function HomeComponent(props) {
                 <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                   <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
                     <form
-                      onSubmit={handleButtonClick}
+                      onSubmit={handleSearch}
                       className="w-full max-w-xs mx-auto space-y-5"
                     >
                       <input
                         type="text"
                         placeholder="Restaurant Name"
                         name="search-input-restaurants"
+                        onChange={(e) => setTerm(e.target.value)}
                         className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
                         required={false}
                       />
@@ -259,6 +210,7 @@ function HomeComponent(props) {
                         type="text"
                         placeholder="Seattle, WA 98104"
                         name="search-input-zipcode"
+                        onChange={(e) => setLocation(e.target.value)}
                         className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
                         required={false}
                       />
