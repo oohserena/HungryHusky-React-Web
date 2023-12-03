@@ -53,7 +53,7 @@ export const logout = async () => {
 };
 
 export const account = async () => {
-  const response = await request.get(`${USERS_API}/65580756fed6bb3b501c55f2`);
+  const response = await request.post(`${USERS_API}/profile`);
   return response.data;
 };
 export const findReviewsByUserId = async (id) => {

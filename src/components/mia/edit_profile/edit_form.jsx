@@ -7,7 +7,6 @@ import { useEffect } from "react";
 
 
 export default function EditForm(props) {
-  console.log("edit form props");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [user, setUser] = useState({});
