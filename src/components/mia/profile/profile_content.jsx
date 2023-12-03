@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams, useRouter } from "next/navigation";
-import * as client from "../../client.js";
-import { useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+
 
 
 export default function ProfileComponent(props) {
   const [rows, setRows] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,10 +26,6 @@ export default function ProfileComponent(props) {
   };
 
   useEffect(() => {
-    // Fetch data from external API
-    // fetch("https://api.example.com/restaurants")
-    //   .then((response) => response.json())
-    //   .then((data) => setRows(data));
 
     const rows = [
         {
@@ -47,31 +43,26 @@ export default function ProfileComponent(props) {
 
   }, []);
 
-  const searchParams = useSearchParams();
-  // const userId = searchParams.get("id");
   const params = useParams();
   const userId = params.id;
-  let currentUserId = undefined;
+  const { currentUser } = useSelector((state) => state.userReducer);
+  const currentUserId = currentUser._id;
+  const currenUserRole = currentUser.role;
 
 
   useEffect(() => {
-    // /api/users/current
-    // fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/current`)
-    //   .then(response => response.json())
-    //   .then(data => {  
-    //     currentUserId = data._id;
-    //     setIsAdmin(data.isAdmin);
-    //      setFirstName(data.firstName);
-    //      setLastName(data.lastName);
-          // setEmail(data.email);
-          // setIsAdmin(data.role === 'ADMIN');
-    //   }
+
+    if (currenUserRole === 'ADMIN') {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
 
 
     const loggedIn = currentUserId !== undefined
     const hasUserId = userId !== undefined
     const same_user = currentUserId === userId
-
+    
     // profile page
     if (!hasUserId) {
       if (loggedIn) {
@@ -87,29 +78,16 @@ export default function ProfileComponent(props) {
       } else if (loggedIn && !same_user) {
         setIsAdmin(false);
         setIsEditable(true);
+        
       } else if (!loggedIn) {
         setIsAdmin(false);
         setIsEditable(false);
       }
       
-      fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.error === 'User not found') {
-          
-          router.push('/login');
-        } else {
-          setFirstName(data.firstName);
-          setLastName(data.lastName);
-          setEmail(data.email);
-        }
-        })
-        .catch(error => {
-          console.error('Error fetching user data:', error);
-        });
-      setIsAdmin(true);
-      setIsEditable(true);
     }
+
+    setFirstName(currentUser.firstName);
+    setLastName(currentUser.lastName);
     
 
   }, [userId]); 
