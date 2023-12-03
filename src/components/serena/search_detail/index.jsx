@@ -5,11 +5,11 @@ import Review from "./Review";
 import { useRouter } from "next/router";
 
 
-export default function SearchDetail() {
+export default function SearchDetail({id}) {
     return (
         <div>
         <NavigationBar />
-        <RestaurantInfo />
+            <RestaurantInfo restaurantId={id}/>
         <Review />
      
         </div>
