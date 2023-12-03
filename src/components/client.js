@@ -24,7 +24,7 @@ export const updateUser = async (user) => {
 };
 
 export const login = async (credentials) => {
-  const response = await request.post(`${USERS_API}`, credentials);
+  const response = await request.post(`${USERS_API}/login`, credentials);
   return response.data;
 };
 
@@ -44,12 +44,17 @@ export const RestaurantDetail = async (id) => {
 
 
 export const register = async (credentials) => {
-  const response = await request.post(`${USERS_API}`, credentials);
+  const response = await request.post(`${USERS_API}/register`, credentials);
   return response.data;
 };
 
 //need add to nav bar
 export const logout = async () => {
   const response = await request.post(`${USERS_API}`);
+  return response.data;
+};
+
+export const account = async () => {
+  const response = await request.post(`${USERS_API}/profile`);
   return response.data;
 };
