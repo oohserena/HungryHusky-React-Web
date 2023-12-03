@@ -38,6 +38,8 @@ export const searchRestaurants = async (term, location) => {
 export const RestaurantDetail = async (id) => {
   console.log(`${RESTAURANT_API}/${id}`)
   const response = await request.get(`${RESTAURANT_API}/${id}`);
+  return response.data;
+};
 
 export const register = async (credentials) => {
   const response = await request.post(`${USERS_API}`, credentials);
