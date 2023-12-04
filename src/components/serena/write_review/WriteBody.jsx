@@ -4,26 +4,44 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import * as client from "../../client.js";
 import { setCurrentUser } from "@/components/common/reducer";
-import { useDispatch, useSelector } from "react-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function WriteBody(props) {
+export default function WriteBody({restaurantId}) {
   const [review, setReview] = React.useState("");
   const router = useRouter();
 
   const { currentUser } = useSelector((state) => state.userReducer);
-  console.log("currentUser:", currentUser)
   const currentUserId = currentUser._id;
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
   };
 
-  const handlePostReview = () => {
-    router.push('/search_detail');
+  const handlePostReview = async () => {
+    const actualRestaurantId = restaurantId.restaurantId;
+    console.log("currentUser ID:", currentUser?._id);
+    console.log(actualRestaurantId);
+    console.log("Review content:", review);
+
+    if (currentUser && currentUser._id && restaurantId && review) {
+      try {
+        const reviewData = {
+          user_id: currentUserId,
+          restaurant_id: actualRestaurantId,
+          content: review,
+        }
+        await client.createReview(reviewData);
+        router.push('/search_detail/' + actualRestaurantId);
+      } catch (error) {
+        console.error('Error posting review:', error);
+      }
+    } else {
+      console.error('Missing information for review');
+    }
   };
 
   const handleCancel = () => {
-    router.push('/search_detail');
+    router.push('/search_detail' + actualRestaurantId);
   };
 
   return (

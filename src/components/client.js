@@ -67,3 +67,7 @@ export const findReviewsByRestaurantId = async (id) => {
   return response.data;
 }
 
+export const createReview = async (reviewData) => {
+  const response = await request.post(`${BASE_API}/api/reviews`, reviewData);
+  return response.data;
+}

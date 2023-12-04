@@ -11,6 +11,7 @@ export default function RestaurantInfo({restaurantId}) {
  
   const router = useRouter();
   const [restaurant, setRestaurant] = useState(null);
+  console.log("restaurantId:", restaurantId)
 
   useEffect(() => {
     if (restaurantId) {
@@ -28,11 +29,8 @@ export default function RestaurantInfo({restaurantId}) {
     }
   }
 
-  
-
   const handleButtonClick = () => {
-    // handle button click event here
-    router.push('/write_review');
+    router.push(`/write_review/${restaurantId}`);
   };
 
   return (
@@ -42,28 +40,6 @@ export default function RestaurantInfo({restaurantId}) {
         <h1 className="relative title-margin font-semibold text-4xl mt-5 max-sm:w-[500px] max-sm:mx-auto">
           {restaurant ? restaurant.name: 'Loading...'}
         </h1>
-        {/* {restaurant && restaurant.photos && (
-            <div className="flex-shrink-0 box-border image-margin h-[150px] w-[500px]">
-              <Image 
-                src={restaurant.photos[0]} // Assuming the first photo is to be displayed
-                alt={`Image of ${restaurant.name}`} 
-                layout="fill" 
-                objectFit="cover" 
-              />
-              <Image 
-                src={restaurant.photos[1]} // Assuming the first photo is to be displayed
-                alt={`Image of ${restaurant.name}`} 
-                layout="fill" 
-                objectFit="cover" 
-              />
-              <Image 
-                src={restaurant.photos[2]} // Assuming the first photo is to be displayed
-                alt={`Image of ${restaurant.name}`} 
-                layout="fill" 
-                objectFit="cover" 
-              />
-            </div>
-          )} */}
       </div>
         <div className="flex flex-col relative shrink-0 box-border h-[30px] w-[600px] mt-5">
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
