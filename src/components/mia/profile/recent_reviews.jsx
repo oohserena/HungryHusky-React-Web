@@ -11,7 +11,6 @@ export default function ReviewComponent(props) {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${currentUserId}/review`);
       const data = await response.json();
-      console.log("data", data);
       const reviews = data.map(review => {
         return {
           id: review._id,
@@ -20,7 +19,6 @@ export default function ReviewComponent(props) {
           date: review.createdAt,
           }
       });
-      console.log("reviews", reviews);
       setReviews(reviews);
 
     } catch (error) {
@@ -29,19 +27,28 @@ export default function ReviewComponent(props) {
   };
 
   useEffect(() => {
-    console.log("in useEffect fetchReviews");
     fetchReviews();
   }, []);
 
   const handleDeleteReview = async (index) => {
     try {
-      const updatedReviews = [...reviews];
-      updatedReviews.splice(index, 1);
-      setReviews(updatedReviews);
       // Make API call to delete the review
-      // await fetch(`https://api.example.com/reviews/${review.id}`, {
-      //   method: "DELETE",
-      // });
+      const reviewId = reviews[index].id;
+      if (!reviewId) {
+        console.error("Review ID not found");
+        return;
+      }
+      console.log("reviewId", reviewId);
+
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/reviews/${reviewId}`, {
+        method: "DELETE",
+      });
+      console.log("Review deleted");
+      // Update the state
+      const newReviews = [...reviews];
+      newReviews.splice(index, 1);
+      setReviews(newReviews);
+
     } catch (error) {
       console.error(error);
     }
