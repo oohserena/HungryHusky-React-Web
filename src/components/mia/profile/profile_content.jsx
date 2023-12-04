@@ -93,6 +93,9 @@ export default function ProfileComponent(props) {
   }, [userId]); 
 
 
+  
+
+
   return (
     <section className="flex flex-col relative shrink-0 box-border bg-white pt-12 pb-24 px-8 border-solid border-neutral-400">
       <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">

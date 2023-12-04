@@ -1,39 +1,37 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function ReviewComponent(props) {
   const [reviews, setReviews] = useState([]);
-
-  useEffect(() => {
-    fetchReviews();
-  }, []);
+  const { currentUser } = useSelector((state) => state.userReducer);
+  console.log("currentUser", currentUser);
+  const currentUserId = currentUser._id;
 
   const fetchReviews = async () => {
     try {
-    //   const response = await fetch("https://api.example.com/reviews");
-    //   const data = await response.json();
-    //   setReviews(data);
-    const reviews = [
-        {
-          restaurantName: "Restaurant Name",
-          review:
-            "It was okay. The carnitas tacos didn't really have much flavor and the carbs Asada taco had gristle and fat. I was expecting refried beans.",
-        },
-        {
-          restaurantName: "Restaurant Name",
-          review:
-            "It was okay. The carnitas tacos didn't really have much flavor and the carbs Asada taco had gristle and fat. I was expecting refried beans.",
-        },
-        {
-          restaurantName: "Restaurant Name",
-          review:
-            "It was okay. The carnitas tacos didn't really have much flavor and the carbs Asada taco had gristle and fat. I was expecting refried beans.",
-        },
-      ];
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${currentUserId}/review`);
+      const data = await response.json();
+      console.log("data", data);
+      const reviews = data.map(review => {
+        return {
+          id: review._id,
+          restaurant_id: review.restaurant_id,
+          review: review.content,
+          date: review.createdAt,
+          }
+      });
+      console.log("reviews", reviews);
       setReviews(reviews);
+
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    console.log("in useEffect fetchReviews");
+    fetchReviews();
+  }, []);
 
   const handleDeleteReview = async (index) => {
     try {
