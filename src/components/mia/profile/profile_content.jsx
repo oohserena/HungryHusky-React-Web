@@ -3,19 +3,24 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-
-
+import { findUserById } from "@/components/client";
 
 export default function ProfileComponent(props) {
   const [rows, setRows] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  let [firstName, setFirstName] = useState("");
+  let [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const router = useRouter();
-
-  
+  const params = useParams();
+  const { currentUser } = useSelector((state) => state.userReducer);
+  const userId = params.id;
+  const currentUserId = currentUser._id;
+  const currenUserRole = currentUser.role;
+  const loggedIn = currentUserId !== undefined;
+  const hasProfileUserId = userId !== undefined;
+  const same_user = currentUserId === userId;
 
   const handleAdminInfo = () => {
     router.push("/admin_view");
@@ -25,76 +30,114 @@ export default function ProfileComponent(props) {
     router.push("/edit_profile?id=65580756fed6bb3b501c55f2");
   };
 
-  useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const user = await findUserById(userId);
+      // const currentUser = await client.findCurrentUser(id);
+      // if (currentUser.id !== user.id) router.push('/profile');
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
 
-    const rows = [
-        {
-            id: 1,
-            name: "Restaurant Name",
-            image: "https://unsplash.com/photos/a-row-of-chairs-sitting-next-to-each-other-on-top-of-a-wooden-floor-rNsA91ci5fc",
-        },
-        {
-            id: 2,
-            name: "Restaurant Name",
-            image: "https://unsplash.com/photos/a-row-of-chairs-sitting-next-to-each-other-on-top-of-a-wooden-floor-rNsA91ci5fc",
-        },
-    ];
-    setRows(rows);
+  const fetchFavorites = async () => {
+    try {
+      let response;
+      if (currentUserId === undefined) {
+        response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}/favorites`
+        );
+      } else {
+        response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${currentUserId}/favorites`
+        );
+      }
 
-  }, []);
+      const data = await response.json();
+      const firstThreeFavorites = data.slice(0, 3);
 
-  const params = useParams();
-  const userId = params.id;
-  const { currentUser } = useSelector((state) => state.userReducer);
-  const currentUserId = currentUser._id;
-  const currenUserRole = currentUser.role;
+      const favorites = await Promise.all(
+        firstThreeFavorites.map(async (favorite) => {
+          const restaurantName = await fetchRestaurantName(
+            favorite.restaurant_id
+          );
 
+          return {
+            id: favorite._id,
+            restaurant_id: favorite.restaurant_id,
+            restaurantName,
+          };
+        })
+      );
 
-  useEffect(() => {
+      setRows(favorites);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    if (currenUserRole === 'ADMIN') {
+  const fetchRestaurantName = async (restaurantId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/businesses/${restaurantId}`
+      );
+      if (response.status !== 200) {
+        return "Restaruant AAA";
+      } else {
+        const data = await response.json();
+        return data.name;
+      }
+    } catch (error) {
+      console.error(error);
+      return "Restaruant AAA";
+    }
+  };
+
+  const initIsAdmin = () => {
+    if (currenUserRole === "ADMIN") {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
     }
+  };
 
-
-    const loggedIn = currentUserId !== undefined
-    const hasUserId = userId !== undefined
-    const same_user = currentUserId === userId
-    
-    // profile page
-    if (!hasUserId) {
-      if (loggedIn) {
-        // fetch user
-        setIsEditable(true);
-      } else {
-        router.push('/login');
-      }
-    // profile/id page
+  const initProfileInfo = () => {
+    if (loggedIn) {
+      setIsEditable(true);
+      setFirstName(currentUser.firstName);
+      setLastName(currentUser.lastName);
     } else {
-      if (loggedIn && same_user) {
-        router.push('/profile');
-      } else if (loggedIn && !same_user) {
-        setIsAdmin(false);
-        setIsEditable(true);
-        
-      } else if (!loggedIn) {
-        setIsAdmin(false);
-        setIsEditable(false);
-      }
-      
+      router.push("/login");
     }
+  };
 
-    setFirstName(currentUser.firstName);
-    setLastName(currentUser.lastName);
-    
+  const initProfileIdInfo = () => {
+    setIsAdmin(false);
+    setIsEditable(false);
+    if (loggedIn && same_user) {
+      router.push("/profile");
+    } else {
+      const user = fetchUser(userId);
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+    }
+  };
 
-  }, [userId]); 
+  const initUserInfo = () => {
+    if (hasProfileUserId) {
+      initProfileIdInfo();
+    } else {
+      initProfileInfo();
+    }
+  };
 
-
-  
-
+  useEffect(() => {
+    initIsAdmin();
+    initUserInfo();
+    fetchFavorites();
+  }, []);
 
   return (
     <section className="flex flex-col relative shrink-0 box-border bg-white pt-12 pb-24 px-8 border-solid border-neutral-400">
@@ -124,12 +167,12 @@ export default function ProfileComponent(props) {
               </div>
             )}
             <h2 className="relative shrink-0 box-border h-auto text-3xl font-black mt-36 mb-auto mx-auto">
-                {`${firstName} ${lastName}`}
-                </h2>
+              {`${firstName} ${lastName}`}
+            </h2>
             {isEditable && (
               <>
-              <p className="relative shrink-0 box-border h-auto text-xl font-semibold mt-8 mb-auto mx-auto">
-                {email} <br />
+                <p className="relative shrink-0 box-border h-auto text-xl font-semibold mt-8 mb-auto mx-auto">
+                  {email} <br />
                 </p>
                 <button
                   onClick={handleEditProfile}
@@ -149,14 +192,17 @@ export default function ProfileComponent(props) {
               </strong>
             </h1>
             {rows.map((row, index) => (
-              <div className="flex flex-col relative shrink-0 box-border mt-5" key={index}>
+              <div
+                className="flex flex-col relative shrink-0 box-border mt-5"
+                key={index}
+              >
                 <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                   <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
                     <Link
                       to={`/restaurant/${row.id}`}
                       className="relative shrink-0 box-border h-auto text-xl mt-5"
                     >
-                      {row.name} <br />
+                      {row.restaurantName} <br />
                     </Link>
                     <img
                       loading="lazy"
@@ -172,4 +218,4 @@ export default function ProfileComponent(props) {
       </div>
     </section>
   );
-};
+}
