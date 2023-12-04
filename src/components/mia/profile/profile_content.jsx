@@ -21,13 +21,15 @@ export default function ProfileComponent(props) {
   const loggedIn = currentUserId !== undefined;
   const hasProfileUserId = userId !== undefined;
   const same_user = currentUserId === userId;
+  const defaultImage = "/images/resimage.jpg";
 
   const handleAdminInfo = () => {
     router.push("/admin_view");
   };
 
   const handleEditProfile = () => {
-    router.push("/edit_profile?id=65580756fed6bb3b501c55f2");
+    console.log("edit profile");
+    router.push(`/edit_profile?id=${currentUserId}`);
   };
 
   const fetchUser = async () => {
@@ -60,14 +62,14 @@ export default function ProfileComponent(props) {
 
       const favorites = await Promise.all(
         firstThreeFavorites.map(async (favorite) => {
-          const restaurantName = await fetchRestaurantName(
+          const { name, image } = await fetchRestaurantDetails(
             favorite.restaurant_id
           );
-
           return {
             id: favorite._id,
             restaurant_id: favorite.restaurant_id,
-            restaurantName,
+            restaurantName: name,
+            restaurantImage: image,
           };
         })
       );
@@ -78,20 +80,20 @@ export default function ProfileComponent(props) {
     }
   };
 
-  const fetchRestaurantName = async (restaurantId) => {
+  const fetchRestaurantDetails = async (restaurantId) => {
     try {
       const response = await fetch(
         `http://localhost:4000/api/businesses/${restaurantId}`
       );
       if (response.status !== 200) {
-        return "Restaruant AAA";
+        return { name: "Restaurant AAA", image: defaultImage };
       } else {
         const data = await response.json();
-        return data.name;
+        return { name: data.name, image: data.photos[0] };
       }
     } catch (error) {
       console.error(error);
-      return "Restaruant AAA";
+      return { name: "Restaurant AAA", image: defaultImage };
     }
   };
 
@@ -206,8 +208,8 @@ export default function ProfileComponent(props) {
                     </Link>
                     <img
                       loading="lazy"
-                      src={row.image}
-                      className={`aspect-[${row.aspectRatio}] object-cover object-center w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden max-w-[600px] mt-5`}
+                      src={row.restaurantImage}
+                      className={`object-cover object-center w-full h-32 shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden max-w-[600px] mt-5`}
                     />
                   </div>
                 </div>
