@@ -56,7 +56,14 @@ export const account = async () => {
   const response = await request.post(`${USERS_API}/profile`);
   return response.data;
 };
+
 export const findReviewsByUserId = async (id) => {
-  const response = await request.get(`${USERS_API}/${id}/reviews`);
+  const response = await request.get(`${USERS_API}/${id}/review`);
   return response.data;
 }
+
+export const findReviewsByRestaurantId = async (id) => {
+  const response = await request.get(`${BASE_API}/api/restaurants/${id}/review`);
+  return response.data;
+}
+

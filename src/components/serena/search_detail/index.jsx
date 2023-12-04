@@ -9,8 +9,8 @@ export default function SearchDetail({id}) {
     return (
         <div>
         <NavigationBar />
-            <RestaurantInfo restaurantId={id}/>
-        <Review />
+        <RestaurantInfo restaurantId={id}/>
+        <Review restaurantId={id}/>
      
         </div>
     );

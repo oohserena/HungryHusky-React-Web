@@ -6,13 +6,13 @@ import store from '../../../components/store';
 import CurrentUser from "../../../components/common/currentUser";
 
 
-export default function Page({ params}) {
+export default function Page({ params }) {
   console.log(params)
   return (
     <Provider store={store}>
       <CurrentUser>
         <BrowserRouter>
-          <SearchDetail id={params.params.id}/>
+          <SearchDetail id={params.id}/>
         </BrowserRouter>
       </CurrentUser>
     </Provider>

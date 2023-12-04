@@ -2,10 +2,17 @@
 import * as React from "react";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import * as client from "../../client.js";
+import { setCurrentUser } from "@/components/common/reducer";
+import { useDispatch, useSelector } from "react-dom";
 
 export default function WriteBody(props) {
   const [review, setReview] = React.useState("");
   const router = useRouter();
+
+  const { currentUser } = useSelector((state) => state.userReducer);
+  console.log("currentUser:", currentUser)
+  const currentUserId = currentUser._id;
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
