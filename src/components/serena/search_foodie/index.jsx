@@ -36,9 +36,9 @@ export default function FoodieSearch() {
         }
     };
 
-    if (!isFoodie) {
-        return <div>Access Denied</div>
-    }
+    // if (!isFoodie) {
+    //     return <div>Access Denied</div>
+    // }
 
     return (
         <div>

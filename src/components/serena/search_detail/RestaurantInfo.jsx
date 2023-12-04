@@ -92,8 +92,6 @@ export default function RestaurantInfo({restaurantId}) {
             
           </div>
 
-          
-          
         </div>
         {restaurant && restaurant.photos && (
           <div className="flex flex-row shrink-0 gap-2 mt-5 md:mt-0 image-margin">
