@@ -50,7 +50,7 @@ export default function NavigationBar(props) {
             Home
           </button>
         </li>
-        {JSON.stringify(currentUser)}
+        {/* {JSON.stringify(currentUser)} */}
         { currentUser ? (
           <>
             <li className="text-white font-semibold pr-2.5 max-sm:mx-auto max-sm:pl-2.5">
