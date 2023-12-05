@@ -5,7 +5,7 @@ export default function ReviewComponent(props) {
   const [reviews, setReviews] = useState([]);
   const { currentUser } = useSelector((state) => state.userReducer);
   console.log("currentUser", currentUser);
-  const currentUserId = currentUser._id;
+  const currentUserId = currentUser?._id;
 
   const fetchReviews = async () => {
     try {
