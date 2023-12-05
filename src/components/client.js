@@ -71,3 +71,18 @@ export const createReview = async (reviewData) => {
   const response = await request.post(`${BASE_API}/api/reviews`, reviewData);
   return response.data;
 }
+
+export const createFavorite = async (favoriteData) => {
+  const response = await request.post(`${BASE_API}/api/favorites`, favoriteData);
+  return response.data;
+}
+
+export const deleteFavorite = async (id) => {
+  const response = await request.delete(`${BASE_API}/api/favorites/${id}`, id);
+  return response.data;
+}
+
+export const findFavoriteByUserId = async (userId) => {
+  const response = await request.get(`${BASE_API}/api/users/${userId}/favorites`, userId);
+  return response.data;
+}

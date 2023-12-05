@@ -1,20 +1,68 @@
 
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import * as client from "../../client.js";
+import { setCurrentUser } from "@/components/common/reducer";
+import { useDispatch, useSelector } from "react-redux";
 
 
 export default function RestaurantItem({id, name, rating, imageSrc}) {
-  const [isFavorite, setIsFavorite] = useState(false);
     const router = useRouter();
-    const handleFavoriteClick = () => {
-      setIsFavorite(!isFavorite);
-    };
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [favoriteId, setFavoriteId] = useState(null);
+    const { currentUser } = useSelector((state) => 
+      state.userReducer
+    );
+
+    useEffect(() => {
+      const fetchFavorites = async () => {
+          try {
+              const favorites = await client.findFavoriteByUserId(currentUser._id);
+              const currentFavorite = favorites.find(f => f.restaurant_id === id);
+              console.log("currentFavorite:", currentFavorite._id)
+              if (currentFavorite) {
+                  setIsFavorite(true);
+                  setFavoriteId(currentFavorite._id);
+              }
+          } catch (error) {
+              console.error('Error fetching favorites:', error);
+          }
+      };
+
+      if (currentUser && currentUser._id) {
+          fetchFavorites();
+      }
+  }, [id, currentUser]);
   
     const handleDetailsClick = () => {
       router.push(`/search_detail/${id}`);
     };
+
+    const handleFavoriteClick = async () => {
+      if (isFavorite) {
+          try {
+              await client.deleteFavorite(favoriteId);
+              setIsFavorite(false);
+              setFavoriteId(null); // Reset the favorite ID
+          } catch (error) {
+              console.error('Error deleting favorite:', error);
+          }
+      } else {
+          try {
+              const newFavorite = await client.createFavorite({
+                  user_id: currentUser._id,
+                  restaurant_id: id,
+              });
+              setIsFavorite(true);
+              setFavoriteId(newFavorite._id); // Set the new favorite ID
+          } catch (error) {
+              console.error('Error creating favorite:', error);
+          }
+      }
+  };
+
   
     return (
       <div className="flex flex-col relative shrink-0 box-border border ml-4 mt-5 pr-px border-solid border-neutral-400">
