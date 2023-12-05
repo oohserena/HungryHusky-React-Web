@@ -1,5 +1,5 @@
 'use client';
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import * as client from "../../client.js";
@@ -9,21 +9,38 @@ import { useDispatch, useSelector } from "react-redux";
 export default function WriteBody({restaurantId}) {
   const [review, setReview] = React.useState("");
   const router = useRouter();
-
+  const [restaurant, setRestaurant] = useState(null);
+  const actualRestaurantId = restaurantId.restaurantId;
   const { currentUser } = useSelector((state) => state.userReducer);
   const currentUserId = currentUser._id;
+
+  useEffect(() => {
+    if (actualRestaurantId) {
+      fetchRestaurant(actualRestaurantId);
+    }
+  }, [actualRestaurantId]);
+
+  const fetchRestaurant = async (actualRestaurantId) => {
+    try {
+      const response = await client.RestaurantDetail(actualRestaurantId);
+      // console.log('setting rest')
+      setRestaurant(response);
+    } catch (error) {
+      console.error('Error fetching restaurant detail:', error);
+    }
+  }
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
   };
 
   const handlePostReview = async () => {
-    const actualRestaurantId = restaurantId.restaurantId;
-    console.log("currentUser ID:", currentUser?._id);
-    console.log(actualRestaurantId);
-    console.log("Review content:", review);
+    
+    // console.log("currentUser ID:", currentUser?._id);
+    // console.log(actualRestaurantId);
+    // console.log("Review content:", review);
 
-    if (currentUser && currentUser._id && restaurantId && review) {
+    if (currentUser && currentUser._id && actualRestaurantId && review) {
       try {
         const reviewData = {
           user_id: currentUserId,
@@ -48,7 +65,7 @@ export default function WriteBody({restaurantId}) {
     <main className="flex flex-col relative shrink-0 box-border bg-white min-h-[2000px]">
       <section className="flex flex-col relative shrink-0 box-border mt-8 pl-5 pr-12">
         <h1 className="relative shrink-0 box-border h-auto font-semibold text-4xl ml-44 mr-auto mt-5 max-sm:w-[500px] max-sm:ml-5 max-sm:mr-auto max-sm:pr-px">
-          Din Tai Fung
+          {restaurant ? restaurant.name: 'Loading...'}
         </h1>
       </section>
       <section className="flex flex-col relative shrink-0 box-border mt-5">

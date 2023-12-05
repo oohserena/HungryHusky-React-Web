@@ -3,26 +3,34 @@ import React, { useEffect, useState }from "react";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import * as client from "../../client.js";
+import { setCurrentUser } from "@/components/common/reducer";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function RestaurantSearchBar() {
   const router = useRouter();
   const [error, setError] = useState(null);
   const [term, setTerm] = useState('');
   const [location, setLocation] = useState('');
-  const [isFoodie, setIsFoodie] = useState(false);
-  const [isAnalytics, setIsAnalytics] = useState(true);
+  // const [isFoodie, setIsFoodie] = useState(false);
+  // const [isAnalytics, setIsAnalytics] = useState(true);
+  const { currentUser } = useSelector((state) => 
+      state.userReducer
+    );
+  console.log("currentUser:", currentUser);
+  const currentUserRole = currentUser.role;
+  console.log("currentUserRole:", currentUserRole);
 
-  useEffect(() => {
-    setIsFoodie(false);
-    setIsAnalytics(true);
-  }, []);
+  // useEffect(() => {
+  //   setIsFoodie(false);
+  //   setIsAnalytics(true);
+  // }, []);
 
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      if (isFoodie) {
+      if ( currentUserRole === "FOODIE") {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
-      } else if (isAnalytics) {
+      } else if ( currentUserRole === "BUSINESS ANALYST") {
         router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       }
     } catch (error) {

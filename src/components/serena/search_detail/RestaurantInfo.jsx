@@ -11,7 +11,6 @@ export default function RestaurantInfo({restaurantId}) {
  
   const router = useRouter();
   const [restaurant, setRestaurant] = useState(null);
-  console.log("restaurantId:", restaurantId)
 
   useEffect(() => {
     if (restaurantId) {
