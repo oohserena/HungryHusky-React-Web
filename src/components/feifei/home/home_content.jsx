@@ -10,10 +10,11 @@ const defaultImage2 = "/images/foodimage.jpeg";
 function HomeComponent(props) {
   const router = useRouter();
   const { currentUser } = useSelector((state) => state.userReducer);
-  const currentUserRole = currentUser.role;
+  
   //console.log("currentUser:", currentUser);
   //const currentUserId = currentUser._id;
   const currentUserId = currentUser?._id;
+  const currentUserRole = currentUser?.role;
 
 
   const [recentReviewData, setRecentReviewData] = useState([]);
@@ -168,14 +169,16 @@ function HomeComponent(props) {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       } else if ( currentUserRole === "BUSINESS ANALYST") {
         router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
+      } else if ( currentUserRole === "ADMIN") {
+        router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       }
       //   const response = await client.searchRestaurants(term, location);
       // Handle the search result. For example, you can redirect to a search results page.
-      router.push(
-        `/foodie_search?term=${encodeURIComponent(
-          term
-        )}&location=${encodeURIComponent(location)}`
-      );
+      // router.push(
+      //   `/foodie_search?term=${encodeURIComponent(
+      //     term
+      //   )}&location=${encodeURIComponent(location)}`
+      // );
     } catch (error) {
       console.error("Error fetching restaurants:", error);
       setError(error);
