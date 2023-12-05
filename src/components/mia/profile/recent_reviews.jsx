@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "next/navigation";
 
 export default function ReviewComponent(props) {
   const [reviews, setReviews] = useState([]);
   const { currentUser } = useSelector((state) => state.userReducer);
   console.log("currentUser", currentUser);
   const currentUserId = currentUser?._id;
+  const params = useParams();
+  const userId = params.id;
 
   const fetchReviews = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${currentUserId}/review`
-      );
+      let response;
+      if (currentUserId === undefined) {
+        response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}/review`
+        );
+      } else {
+        response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${currentUserId}/review`
+        );
+      }
+
       const data = await response.json();
       const reviews = data.map((review) => {
         return {
@@ -109,12 +120,14 @@ export default function ReviewComponent(props) {
                 </p>
               </div>
 
-              <button
-                className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl mt-5 mx-auto px-6 py-4"
-                onClick={() => handleDeleteReview(index)}
-              >
-                Delete
-              </button>
+              {currentUserId && (
+                <button
+                  className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl mt-5 mx-auto px-6 py-4"
+                  onClick={() => handleDeleteReview(index)}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </div>
         </section>
