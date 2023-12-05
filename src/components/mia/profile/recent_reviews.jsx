@@ -120,7 +120,7 @@ export default function ReviewComponent(props) {
                 </p>
               </div>
 
-              {currentUserId && (
+              {currentUserId && userId === undefined && (
                 <button
                   className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl mt-5 mx-auto px-6 py-4"
                   onClick={() => handleDeleteReview(index)}

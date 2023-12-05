@@ -135,6 +135,10 @@ export default function ProfileComponent(props) {
     }
   };
 
+  const handleRestaurant = (restaurant_id) => {
+    router.push(`/search_detail/${restaurant_id}`);
+  };
+
   useEffect(() => {
     initIsAdmin();
     initUserInfo();
@@ -200,17 +204,19 @@ export default function ProfileComponent(props) {
               >
                 <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                   <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
-                    <Link
-                      to={`/restaurant/${row.id}`}
+                    <button
+                      onClick={() => {
+                        handleRestaurant(row.restaurant_id);
+                      }}
                       className="relative shrink-0 box-border h-auto text-xl mt-5"
                     >
                       {row.restaurantName} <br />
-                    </Link>
-                    <img
-                      loading="lazy"
-                      src={row.restaurantImage}
-                      className={`object-cover object-center w-full h-32 shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden max-w-[600px] mt-5`}
-                    />
+                      <img
+                        loading="lazy"
+                        src={row.restaurantImage}
+                        className={`object-cover object-center w-full h-32 shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden max-w-[600px] mt-5`}
+                      />
+                    </button>
                   </div>
                 </div>
               </div>
