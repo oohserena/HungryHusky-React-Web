@@ -16,6 +16,12 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
       state.userReducer
     );
 
+    const [ratingFiveCount, setRatingFiveCount] = useState(0);
+    const [ratingFourCount, setRatingFourCount] = useState(0);
+    const [ratingThreeCount, setRatingThreeCount] = useState(0);
+    const [ratingTwoCount, setRatingTwoCount] = useState(0);
+    const [ratingOneCount, setRatingOneCount] = useState(0);
+
     useEffect(() => {
       const fetchFavorites = async () => {
           try {
@@ -34,6 +40,8 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
       if (currentUser && currentUser._id) {
           fetchFavorites();
       }
+
+      fetchRatings();
   }, [id, currentUser]);
   
     const handleDetailsClick = () => {
@@ -63,6 +71,22 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
       }
   };
 
+  // Get Rating Distribution for the restaurant
+  const fetchRatings = async () => {
+    try{
+      const ratings = await client.getRatings(id);
+      console.log('ratings:', ratings)
+      setRatingFiveCount(ratings.ratingFiveCount);
+      setRatingFourCount(ratings.ratingFourCount);
+      setRatingThreeCount(ratings.ratingThreeCount);
+      setRatingTwoCount(ratings.ratingTwoCount);
+      setRatingOneCount(ratings.ratingOneCount);
+
+    } catch (error) {
+      console.error('Error creating favorite:', error);
+    }
+  };
+
   
     return (
       <div className="flex flex-col relative shrink-0 box-border border ml-4 mt-5 pr-px border-solid border-neutral-400">
@@ -87,19 +111,19 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
                       Rating Distribution
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-red-700 text-center ml-8 mt-5">
-                      5 stars:&nbsp; 3,000&nbsp;
+                      5 stars: {ratingFiveCount}
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-orange-500 text-center ml-8 mt-5">
-                      4 stars:&nbsp; 2000
+                      4 stars:{ratingFourCount}
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-amber-500 text-center ml-8 mt-5">
-                      3 stars:&nbsp; 1000
+                      3 stars:{ratingFourCount}
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-yellow-400 text-center ml-8 mt-5">
-                      2 stars:&nbsp; 500
+                      2 stars:{ratingFourCount}
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-lime-500 text-center ml-8 mt-5">
-                      1 stars:&nbsp; 100
+                      1 stars:{ratingFourCount}
                     </div>
                     </div>
                     <div className="flex flex-col items-stretch w-[33%] ml-5 max-md:w-full max-md:ml-0">

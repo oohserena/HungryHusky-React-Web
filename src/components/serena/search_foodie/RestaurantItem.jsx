@@ -9,9 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 export default function RestaurantItem({ id, name, rating, imageSrc }) {
-    console.log(id)
-
-    
     const router = useRouter();
     const [isFavorite, setIsFavorite] = useState(false);
     const [favoriteId, setFavoriteId] = useState(null);
@@ -19,15 +16,13 @@ export default function RestaurantItem({ id, name, rating, imageSrc }) {
     const { currentUser } = useSelector((state) => 
       state.userReducer
     );
-    console.log('current_user', currentUser._id)
-
     
     useEffect(() => {
       const fetchFavorites = async () => {
           try {
               const favorites = await client.findFavoriteByUserId(currentUser._id);
               const currentFavorite = favorites.find(f => f.restaurant_id === id);
-              console.log("currentFavorite:", currentFavorite._id)
+              // console.log("currentFavorite:", currentFavorite._id)
               if (currentFavorite) {
                   setIsFavorite(true);
                   setFavoriteId(currentFavorite._id);

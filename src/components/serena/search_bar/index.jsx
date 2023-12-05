@@ -16,9 +16,9 @@ export default function RestaurantSearchBar() {
   const { currentUser } = useSelector((state) => 
       state.userReducer
     );
-  console.log("currentUser:", currentUser);
-  const currentUserRole = currentUser.role;
-  console.log("currentUserRole:", currentUserRole);
+  // console.log("currentUser:", currentUser);
+  const currentUserRole = currentUser?.role;
+  // console.log("currentUserRole:", currentUserRole);
 
   // useEffect(() => {
   //   setIsFoodie(false);
@@ -32,6 +32,8 @@ export default function RestaurantSearchBar() {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       } else if ( currentUserRole === "BUSINESS ANALYST") {
         router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
+      } else {
+        router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       }
     } catch (error) {
       console.error('Error fetching restaurants:', error);

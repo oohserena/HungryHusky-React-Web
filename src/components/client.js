@@ -86,3 +86,8 @@ export const findFavoriteByUserId = async (userId) => {
   const response = await request.get(`${BASE_API}/api/users/${userId}/favorites`, userId);
   return response.data;
 }
+
+export const getRatings = async (restaurantId) => {
+  const response = await request.get(`${BASE_API}/api/businesses/${restaurantId}/reviews`);
+  return response.data;
+}
