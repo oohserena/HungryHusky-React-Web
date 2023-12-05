@@ -10,12 +10,11 @@ const defaultImage2 = "/images/foodimage.jpeg";
 function HomeComponent(props) {
   const router = useRouter();
   const { currentUser } = useSelector((state) => state.userReducer);
-  
+  const currentUserRole = currentUser?.role;
   //console.log("currentUser:", currentUser);
   //const currentUserId = currentUser._id;
   const currentUserId = currentUser?._id;
   const currentUserRole = currentUser?.role;
-
 
   const [recentReviewData, setRecentReviewData] = useState([]);
   const [recentActivityData, setRecentActivityData] = useState([]);
@@ -34,10 +33,12 @@ function HomeComponent(props) {
         );
         const data = await response.json();
         console.log("CurrUserReviews", data);
-        const currUserReviews  = await Promise.all(
+        const currUserReviews = await Promise.all(
           data.map(async (review) => {
-            const {name, image} = await fetchRestaurantDetails(review.restaurant_id);
-            return{
+            const { name, image } = await fetchRestaurantDetails(
+              review.restaurant_id
+            );
+            return {
               id: review._id,
               restaurant_id: review.restaurant_id,
               review: review.content,
@@ -72,11 +73,10 @@ function HomeComponent(props) {
         return { name: "Restaurant AAA", image: defaultImage2 };
       }
     };
-    
+
     if (currentUser) {
       fetchCurrUserReviews();
     }
-  
   }, [currentUser]);
 
   // All users'(Visitor&Login) most recent six activity/reviews
@@ -84,20 +84,26 @@ function HomeComponent(props) {
     // fetch all reviews
     const fetchRecentActivityData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/api/reviews`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/reviews`
+        );
         const data = await response.json();
         const sortedData = data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        const recentDataPromises = sortedData.slice(0, 6).map(async (activity) => {
-          const {name, image} = await fetchRestaurantDetails(activity.restaurant_id);
-          return {
-            ...activity,
-            username: await fetchUserName(activity.user_id),
-            restaurantName: name,
-            restaurantImage: image,
-          };
-        }); 
+        const recentDataPromises = sortedData
+          .slice(0, 6)
+          .map(async (activity) => {
+            const { name, image } = await fetchRestaurantDetails(
+              activity.restaurant_id
+            );
+            return {
+              ...activity,
+              username: await fetchUserName(activity.user_id),
+              restaurantName: name,
+              restaurantImage: image,
+            };
+          });
         const recentData = await Promise.all(recentDataPromises);
         setRecentActivityData(recentData);
         console.log("activity data", recentData);
@@ -113,16 +119,16 @@ function HomeComponent(props) {
           `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}`
         );
         if (response.status !== 200) {
-          console.log('User not found');
+          console.log("User not found");
           return "Alice Wonderland";
         } else {
           const userData = await response.json();
-          console.log('User data:', userData);
-          console.log('Usernname data:', userData.username);
-          return userData.username; 
+          console.log("User data:", userData);
+          console.log("Usernname data:", userData.username);
+          return userData.username;
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
         return "Alice Wonderland";
       }
     };
@@ -171,6 +177,18 @@ function HomeComponent(props) {
         router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       } else if ( currentUserRole === "ADMIN") {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
+      if (currentUserRole === "FOODIE") {
+        router.push(
+          `/foodie_search?term=${encodeURIComponent(
+            term
+          )}&location=${encodeURIComponent(location)}`
+        );
+      } else if (currentUserRole === "BUSINESS ANALYST") {
+        router.push(
+          `/analytics_search?term=${encodeURIComponent(
+            term
+          )}&location=${encodeURIComponent(location)}`
+        );
       }
       //   const response = await client.searchRestaurants(term, location);
       // Handle the search result. For example, you can redirect to a search results page.
@@ -189,8 +207,8 @@ function HomeComponent(props) {
     const handleReviewNav = (restaurantId) => {
       router.push(`/search_detail/${restaurantId}`);
     };
-  
-    return recentReviewData.slice(0,3).map((review) => (
+
+    return recentReviewData.slice(0, 3).map((review) => (
       <div key={review._id} className="flex flex-row items-stretch w-full">
         <div
           onClick={() => handleReviewNav(review.restaurant_id)}
@@ -205,14 +223,14 @@ function HomeComponent(props) {
                 alt="Restaurant"
               />
             </div>
-  
+
             <div className="flex flex-col w-[60%] ml-5">
               <div className="box-border h-auto">
                 <font color="#4a4a4a">
                   <b className="text-lg">{review.restaurantName}</b>
                 </font>
               </div>
-  
+
               <div className="box-border h-auto flex-grow">
                 <font color="#4a4a4a">{review.review}</font>
               </div>
@@ -222,7 +240,7 @@ function HomeComponent(props) {
       </div>
     ));
   };
-  
+
   const renderRecentActivityItems = () => {
     const handleActNavProfile = (userId) => {
       router.push(`/profile/${userId}`);
@@ -250,7 +268,7 @@ function HomeComponent(props) {
                 srcSet={activity.restaurantImage}
                 className="aspect-[2] object-cover object-center w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden my-2.5"
               />
-              <div 
+              <div
                 onClick={() => handleActNavRestaurant(activity.restaurant_id)}
                 className="cursor-pointer relative shrink-0 box-border h-auto my-2.5 font-bold"
               >
@@ -265,7 +283,7 @@ function HomeComponent(props) {
       </div>
     );
   };
-  
+
   // const renderCategories = () => {
   //   return categoriesData.map((category) => (
   //     <div

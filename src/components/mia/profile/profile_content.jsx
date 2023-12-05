@@ -16,8 +16,8 @@ export default function ProfileComponent(props) {
   const params = useParams();
   const { currentUser } = useSelector((state) => state.userReducer);
   const userId = params.id;
-  const currentUserId = currentUser._id;
-  const currenUserRole = currentUser.role;
+  const currentUserId = currentUser?._id;
+  const currenUserRole = currentUser?.role;
   const loggedIn = currentUserId !== undefined;
   const hasProfileUserId = userId !== undefined;
   const same_user = currentUserId === userId;
