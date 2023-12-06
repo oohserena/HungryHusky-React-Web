@@ -3,9 +3,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import * as client from "../../client.js";
 import { useEffect } from "react";
 
-
-
-
 export default function EditForm(props) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -23,14 +20,13 @@ export default function EditForm(props) {
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setUser(user);
-    }
-    catch (err) {
-      router.push('/profile');
+    } catch (err) {
+      router.push("/profile");
     }
   };
 
   const handleCancel = () => {
-    router.push('/profile');
+    router.push("/profile");
   };
 
   const handleSave = async () => {
@@ -38,9 +34,8 @@ export default function EditForm(props) {
     user.firstName = firstName;
     user.lastName = lastName;
     await client.updateUser(user);
-    router.push('/profile');
+    router.push("/profile");
   };
-
 
   useEffect(() => {
     fetchUser();
@@ -48,9 +43,7 @@ export default function EditForm(props) {
   }, []);
 
   return (
-    <form
-      className="flex flex-col items-center justify-center relative shrink-0 box-border h-auto bg-white min-h-[311px] grow-0"
-    >
+    <form className="flex flex-col items-center justify-center relative shrink-0 box-border h-auto bg-white min-h-[311px] grow-0">
       <label htmlFor="firstName" className="mt-2.5">
         <span className="text-2xl pl-0">
           <b>First Name</b>
@@ -61,7 +54,7 @@ export default function EditForm(props) {
           name="firstName"
           type="text"
           placeholder="First Name"
-          className="border min-h-[40px] mt-2.5 border-solid border-neutral-400"
+          className="border min-h-[40px] mt-2.5 border-solid border-neutral-400 text-center"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           required
@@ -79,7 +72,7 @@ export default function EditForm(props) {
           name="lastName"
           type="text"
           placeholder="Last Name"
-          className="border min-h-[40px] mt-2.5 border-solid border-neutral-400"
+          className="border min-h-[40px] mt-2.5 border-solid border-neutral-400 text-center"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           required
@@ -92,7 +85,7 @@ export default function EditForm(props) {
               <button
                 type="submit"
                 onClick={handleSave}
-                className="relative shrink-0 box-border appearance-none bg-blue-500 text-[white] rounded text-center cursor-pointer text-xl font-semibold w-[200px] mt-5 mx-auto px-6 py-4"
+                className="relative shrink-0 box-border appearance-none bg-green-700 text-[white] rounded text-center cursor-pointer text-xl font-semibold w-[200px] mt-5 mx-auto px-6 py-4"
               >
                 Save
               </button>

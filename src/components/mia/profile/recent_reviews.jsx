@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "next/navigation";
+import { IoIosRestaurant } from "react-icons/io";
+import { FaTrash } from "react-icons/fa";
 
 export default function ReviewComponent(props) {
   const [reviews, setReviews] = useState([]);
@@ -90,12 +92,12 @@ export default function ReviewComponent(props) {
   return (
     <article className="flex flex-col relative shrink-0 box-border h-auto bg-white pb-8">
       <header className="relative shrink-0 box-border h-auto ml-10 mt-5">
-        <h2>
-          <span className="text-2xl">
-            <font color="#d0021b">
-              <span className="text-3xl">Recent Reviews&nbsp;</span>
-            </font>
-          </span>
+        <h2 className="text-2xl text-center">
+          <font color="#d0021b">
+            <strong>
+              <span className="text-2xl text-center">Recent Reviews</span>
+            </strong>
+          </font>
         </h2>
       </header>
       {reviews.map((review, index) => (
@@ -105,9 +107,16 @@ export default function ReviewComponent(props) {
         >
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
             <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
-              <header>
-                <h3>{review.restaurantName}</h3>
-              </header>
+              <div className="flex items-center box-border h-auto">
+                <IoIosRestaurant className="text-3xl text-green-700 mr-2" />
+                <span
+                  className="text-xl font-semibold text-green-700"
+                  style={{ lineHeight: "2.5rem" }}
+                >
+                  {review.restaurantName}
+                </span>
+              </div>
+
               <div className="relative shrink-0 box-border h-auto ml-5 mt-5">
                 <p
                   style={{
@@ -122,9 +131,10 @@ export default function ReviewComponent(props) {
 
               {currentUserId && userId === undefined && (
                 <button
-                  className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl mt-5 mx-auto px-6 py-4"
+                  className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl mt-5 mx-auto px-6 py-4 flex items-center justify-center"
                   onClick={() => handleDeleteReview(index)}
                 >
+                  <FaTrash color="white" className="mr-2" />
                   Delete
                 </button>
               )}

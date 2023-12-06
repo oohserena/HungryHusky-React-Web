@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { findUserById } from "@/components/client";
+import { IoIosRestaurant } from "react-icons/io";
+import { FaUser } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 
 export default function ProfileComponent(props) {
   const [rows, setRows] = useState([]);
@@ -39,6 +41,7 @@ export default function ProfileComponent(props) {
       // if (currentUser.id !== user.id) router.push('/profile');
       setFirstName(user.firstName);
       setLastName(user.lastName);
+      setEmail(user.email);
     } catch (err) {
       console.log("error", err);
     }
@@ -110,6 +113,7 @@ export default function ProfileComponent(props) {
       setIsEditable(true);
       setFirstName(currentUser.firstName);
       setLastName(currentUser.lastName);
+      setEmail(currentUser.email);
     } else {
       router.push("/login");
     }
@@ -149,12 +153,14 @@ export default function ProfileComponent(props) {
     <section className="flex flex-col relative shrink-0 box-border bg-white pt-12 pb-24 px-8 border-solid border-neutral-400">
       <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
         <div className="flex flex-col items-stretch w-6/12 max-md:w-full max-md:ml-0">
-          <header className="flex flex-col relative shrink-0 box-border h-auto border grow-0 min-h-[500px] border-solid border-neutral-400">
+          <header className="flex flex-col relative shrink-0 box-border h-auto border grow-0 min-h-[900px] border-solid border-neutral-400">
             <h1 className="shrink-0 box-border h-auto text-xl ml-5 mt-5">
               <strong>
                 <span className="text-2xl">
                   <font color="#d0021b">
-                    <span className="text-3xl">Profile</span>
+                    <strong>
+                      <span className="text-2xl">Profile</span>
+                    </strong>
                   </font>
                 </span>
               </strong>
@@ -166,15 +172,39 @@ export default function ProfileComponent(props) {
                 </p>
                 <button
                   onClick={handleAdminInfo}
-                  className="relative shrink-0 box-border appearance-none bg-blue-500 text-[white] rounded text-center cursor-pointer text-xl ml-5 mr-auto mt-5 px-6 py-4"
+                  className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl ml-5 mr-auto mt-5 px-6 py-4"
                 >
                   Admin Info
                 </button>
               </div>
             )}
-            <h2 className="relative shrink-0 box-border h-auto text-3xl font-black mt-36 mb-auto mx-auto">
-              {`${firstName} ${lastName}`}
-            </h2>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <h2 className="relative shrink-0 box-border h-auto text-3xl font-black mt-36 mb-auto mx-auto">
+                  <FaUser
+                    size="2em"
+                    color="grey"
+                    style={{ marginBottom: "0.5em" }}
+                  />{" "}
+                </h2>
+                <br />
+                <h2 style={{ fontSize: "2em", fontWeight: "bold", margin: 0 }}>
+                  {`${firstName} ${lastName}`}{" "}
+                </h2>
+              </div>
+            </div>
             {isEditable && (
               <>
                 <p className="relative shrink-0 box-border h-auto text-xl font-semibold mt-8 mb-auto mx-auto">
@@ -182,8 +212,9 @@ export default function ProfileComponent(props) {
                 </p>
                 <button
                   onClick={handleEditProfile}
-                  className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl border mt-12 mb-52 mx-auto px-6 py-4 border-solid border-white"
+                  className="relative shrink-0 box-border appearance-none bg-red-700 text-[white] rounded text-center cursor-pointer text-xl border mt-12 mb-52 mx-auto px-6 py-4 border-solid border-white flex items-center justify-center"
                 >
+                  <FaEdit color="white" className="mr-2" />
                   Edit profile
                 </button>
               </>
@@ -193,9 +224,11 @@ export default function ProfileComponent(props) {
         <div className="flex flex-col items-stretch w-6/12 ml-5 max-md:w-full max-md:ml-0">
           <div className="flex flex-col relative shrink-0 box-border h-auto grow-0 max-sm:h-auto max-sm:grow-0">
             <h1 className="relative shrink-0 box-border h-auto text-xl text-black mt-5 mx-auto">
-              <strong>
-                <span className="text-2xl">Favorite Restaurants</span>
-              </strong>
+              <font color="#d0021b">
+                <strong>
+                  <span className="text-2xl ">Favorite Restaurants</span>
+                </strong>
+              </font>
             </h1>
             {rows.map((row, index) => (
               <div
@@ -210,11 +243,21 @@ export default function ProfileComponent(props) {
                       }}
                       className="relative shrink-0 box-border h-auto text-xl mt-5"
                     >
-                      {row.restaurantName} <br />
+                      <div className="flex items-center box-border h-auto">
+                        <IoIosRestaurant className="text-3xl text-green-700 mr-2" />
+                        <span
+                          className="text-xl font-semibold text-green-700"
+                          style={{ lineHeight: "2.5rem" }}
+                        >
+                          {row.restaurantName}
+                        </span>
+                      </div>
+
                       <img
                         loading="lazy"
                         src={row.restaurantImage}
-                        className={`object-cover object-center w-full h-32 shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden max-w-[600px] mt-5`}
+                        className={`object-cover object-center w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden max-w-[600px] mt-5`}
+                        style={{ height: "200px" }}
                       />
                     </button>
                   </div>
