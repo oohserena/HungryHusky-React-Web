@@ -23,6 +23,11 @@ export const updateUser = async (user) => {
   return response.data;
 };
 
+export const deleteUser = async (id) => {
+  const response = await request.delete(`${USERS_API}/${id}`);
+  return response;
+};
+
 export const login = async (credentials) => {
   const response = await request.post(`${USERS_API}/login`, credentials);
   return response.data;
@@ -46,7 +51,6 @@ export const register = async (credentials) => {
   return response.data;
 };
 
-
 export const logout = async () => {
   const response = await request.post(`${USERS_API}`);
   return response.data;
@@ -60,34 +64,44 @@ export const account = async () => {
 export const findReviewsByUserId = async (id) => {
   const response = await request.get(`${USERS_API}/${id}/review`);
   return response.data;
-}
+};
 
 export const findReviewsByRestaurantId = async (id) => {
-  const response = await request.get(`${BASE_API}/api/restaurants/${id}/review`);
+  const response = await request.get(
+    `${BASE_API}/api/restaurants/${id}/review`
+  );
   return response.data;
-}
+};
 
 export const createReview = async (reviewData) => {
   const response = await request.post(`${BASE_API}/api/reviews`, reviewData);
   return response.data;
-}
+};
 
 export const createFavorite = async (favoriteData) => {
-  const response = await request.post(`${BASE_API}/api/favorites`, favoriteData);
+  const response = await request.post(
+    `${BASE_API}/api/favorites`,
+    favoriteData
+  );
   return response.data;
-}
+};
 
 export const deleteFavorite = async (id) => {
   const response = await request.delete(`${BASE_API}/api/favorites/${id}`, id);
   return response.data;
-}
+};
 
 export const findFavoriteByUserId = async (userId) => {
-  const response = await request.get(`${BASE_API}/api/users/${userId}/favorites`, userId);
+  const response = await request.get(
+    `${BASE_API}/api/users/${userId}/favorites`,
+    userId
+  );
   return response.data;
-}
+};
 
 export const getRatings = async (restaurantId) => {
-  const response = await request.get(`${BASE_API}/api/businesses/${restaurantId}/reviews`);
+  const response = await request.get(
+    `${BASE_API}/api/businesses/${restaurantId}/reviews`
+  );
   return response.data;
-}
+};
