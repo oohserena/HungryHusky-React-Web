@@ -10,8 +10,6 @@ function HomeComponent(props) {
   const router = useRouter();
   const { currentUser } = useSelector((state) => state.userReducer);
   const currentUserRole = currentUser?.role;
-  //console.log("currentUser:", currentUser);
-  //const currentUserId = currentUser._id;
   const currentUserId = currentUser?._id;
   const [recentReviewData, setRecentReviewData] = useState([]);
   const [recentActivityData, setRecentActivityData] = useState([]);
@@ -28,7 +26,7 @@ function HomeComponent(props) {
           `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${currentUserId}/review`
         );
         const data = await response.json();
-        console.log("CurrUserReviews", data);
+        //console.log("CurrUserReviews", data);
         const currUserReviews = await Promise.all(
           data.map(async (review) => {
             const { name, image } = await fetchRestaurantDetails(
@@ -44,10 +42,10 @@ function HomeComponent(props) {
             };
           })
         );
-        console.log("CurrUserReviews after parse", currUserReviews);
+        //console.log("CurrUserReviews after parse", currUserReviews);
         setRecentReviewData(currUserReviews);
       } catch (error) {
-        console.error("Error fetching user reviews:", error);
+        //console.error("Error fetching user reviews:", error);
         setError(error);
       }
     };
@@ -65,7 +63,7 @@ function HomeComponent(props) {
           return { name: data.name, image: data.photos[0] };
         }
       } catch (error) {
-        console.error("Error fetching restaurants details:", error);
+        //console.error("Error fetching restaurants details:", error);
         return { name: "Restaurant AAA", image: defaultImage2 };
       }
     };
@@ -95,21 +93,21 @@ function HomeComponent(props) {
             );
             return {
               ...activity,
-              username: await fetchUserName(activity.user_id),
+              username: await fetchFirstName(activity.user_id),
               restaurantName: name,
               restaurantImage: image,
             };
           });
         const recentData = await Promise.all(recentDataPromises);
         setRecentActivityData(recentData);
-        console.log("activity data", recentData);
+        //console.log("activity data", recentData);
       } catch (error) {
         setError(error);
       }
     };
 
     // fetch username by user_id in review
-    const fetchUserName = async (userId) => {
+    const fetchFirstName = async (userId) => {
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/users/${userId}`
@@ -120,8 +118,9 @@ function HomeComponent(props) {
         } else {
           const userData = await response.json();
           console.log("User data:", userData);
-          console.log("Usernname data:", userData.username);
-          return userData.username;
+          //console.log("Usernname data:", userData.username);
+          //return userData.username;
+          return userData.firstName;
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -153,13 +152,25 @@ function HomeComponent(props) {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      if ( currentUserRole === "FOODIE") {
-        router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
-      } else if ( currentUserRole === "BUSINESS ANALYST") {
-        router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
+      if (currentUserRole === "FOODIE") {
+        router.push(
+          `/foodie_search?term=${encodeURIComponent(
+            term
+          )}&location=${encodeURIComponent(location)}`
+        );
+      } else if (currentUserRole === "BUSINESS ANALYST") {
+        router.push(
+          `/analytics_search?term=${encodeURIComponent(
+            term
+          )}&location=${encodeURIComponent(location)}`
+        );
       } else {
-        router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
-      };
+        router.push(
+          `/foodie_search?term=${encodeURIComponent(
+            term
+          )}&location=${encodeURIComponent(location)}`
+        );
+      }
     } catch (error) {
       console.error("Error fetching restaurants:", error);
       setError(error);
@@ -172,7 +183,7 @@ function HomeComponent(props) {
     };
 
     return recentReviewData.slice(0, 3).map((review) => (
-      <div key={review._id} className="flex flex-row items-stretch w-full">
+      <div key={review._id} className="flex flex-col items-stretch w-full md:w-1/3 px-2 mb-4">
         <div
           onClick={() => handleReviewNav(review.restaurant_id)}
           className="cursor-pointer flex flex-col relative shrink-0 box-border border m-5 border-solid border-neutral-100 w-full rounded-lg"
@@ -216,6 +227,9 @@ function HomeComponent(props) {
     };
     //for user icon
     const getInitials = (name) => {
+      if (!name || typeof name !== 'string' || name.length === 0) {
+        return '';
+      }
       return name.charAt(0).toUpperCase();
     };
 
@@ -249,25 +263,27 @@ function HomeComponent(props) {
                   {activity.username}
                 </span>
               </div>
-              <img
-                loading="lazy"
-                srcSet={activity.restaurantImage}
-                className="aspect-[2] object-cover object-center w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden my-2.5 px-2"
-              />
               <div
                 onClick={() => handleActNavRestaurant(activity.restaurant_id)}
-                className="cursor-pointer relative flex items-center shrink-0 box-border h-auto my-2.5 font-bold px-2"
+                className="cursor-pointer"
               >
-                <IoIosRestaurant className="text-3xl text-green-700 mr-1" />
-                <span
-                  className="text-xl font-semibold text-green-700"
-                  style={{ lineHeight: "2.5rem" }}
-                >
-                  {activity.restaurantName}
-                </span>
-              </div>
-              <div className="relative shrink-0 box-border ml-2 mr-2 h-auto my-2 text-gray-800">
-                {activity.content}
+                <img
+                  loading="lazy"
+                  srcSet={activity.restaurantImage}
+                  className="aspect-[2] object-cover object-center w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden my-2.5 px-2"
+                />
+                <div className="relative flex items-center shrink-0 box-border h-auto my-2.5 font-bold px-2">
+                  <IoIosRestaurant className="text-3xl text-green-700 mr-1" />
+                  <span
+                    className="text-xl font-semibold text-green-700"
+                    style={{ lineHeight: "2.5rem" }}
+                  >
+                    {activity.restaurantName}
+                  </span>
+                </div>
+                <div className="relative shrink-0 box-border ml-2 mr-2 h-auto my-2 text-gray-800">
+                  {activity.content}
+                </div>
               </div>
             </div>
           </div>
@@ -294,7 +310,7 @@ function HomeComponent(props) {
                         placeholder="Restaurant Name"
                         name="search-input-restaurants"
                         onChange={(e) => setTerm(e.target.value)}
-                        className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
+                        className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full rounded-lg"
                         required={true}
                       />
                       <input
@@ -302,12 +318,12 @@ function HomeComponent(props) {
                         placeholder="Seattle, WA 98104"
                         name="search-input-zipcode"
                         onChange={(e) => setLocation(e.target.value)}
-                        className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
+                        className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full rounded-lg"
                         required={true}
                       />
                       <button
                         type="submit"
-                        className="text-white bg-red-700 text-xl p-2.5 rounded border border-solid border-stone-300 w-full max-w-xs"
+                        className="text-white bg-red-700 text-xl p-2.5 rounded border border-solid border-stone-300 w-full max-w-xs rounded-lg"
                       >
                         Search
                       </button>
@@ -333,13 +349,13 @@ function HomeComponent(props) {
               </style>
               <div
                 className="relative shrink-0 box-border h-auto text-center text-3xl text-gray-700 font-semibold tracking-wider mx-auto my-5 p-5"
-                style={{textShadow: `2px 2px 4px rgba(0, 0, 0, 0.3)`}}
+                style={{ textShadow: `2px 2px 4px rgba(0, 0, 0, 0.3)` }}
               >
-                <span 
+                <span
                   className="italic text-red-700 "
-                  style={{ animation: 'blinker 3s linear infinite' }}
+                  style={{ animation: "blinker 3s linear infinite" }}
                 >
-                  Welcome back, {currentUser.username}!
+                  Welcome back, {currentUser.firstName}!
                 </span>
                 <br />
                 Your Recent Review
@@ -358,22 +374,28 @@ function HomeComponent(props) {
         </section>
       )}
 
+      <style>
+        {`
+          @keyframes blinker {    
+          50% { opacity: 0; }
+          }
+        `}
+      </style>
       {!currentUser && (
-          <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5 ">
-            <div 
-              className="relative shrink-0 box-border h-auto text-center text-3xl text-gray-700 font-semibold tracking-wider mx-auto my-5 p-5"
-              style={{textShadow: `2px 2px 4px rgba(0, 0, 0, 0.3)`}}
+        <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5 ">
+          <div
+            className="relative shrink-0 box-border h-auto text-center text-3xl text-gray-700 font-semibold tracking-wider mx-auto my-5 p-5"
+            style={{ textShadow: `2px 2px 4px rgba(0, 0, 0, 0.3)` }}
+          >
+            <span
+              className="italic text-red-700 "
+              style={{ animation: "blinker 3s linear infinite" }}
             >
-              <span 
-                className="italic text-red-700 "
-                style={{ animation: 'blinker 3s linear infinite' }}
-              >
-                Welcome to Hungry Huskies!
-              </span>
-            </div>
-          </section>
-        )
-      }
+              Welcome to Hungry Huskies!
+            </span>
+          </div>
+        </section>
+      )}
 
       <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5 ">
         <div

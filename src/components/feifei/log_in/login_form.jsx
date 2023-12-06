@@ -65,7 +65,7 @@ function LoginForm(props) {
               type="email"
               placeholder="Email"
               name="email"
-              className="p-2.5 rounded border border-solid border-stone-300 w-full"
+              className="p-2.5 rounded border border-solid border-stone-300 w-full rounded-lg"
               required={true}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -73,13 +73,13 @@ function LoginForm(props) {
               type="password"
               placeholder="Password"
               name="Password"
-              className="p-2.5 rounded border border-solid border-stone-300 w-full"
+              className="p-2.5 rounded border border-solid border-stone-300 w-full rounded-lg"
               required={true}
               onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
-              className="text-blue-500 hover:text-blue-700 transition duration-300 text-right"
+              className="text-blue-500 hover:text-blue-700 transition duration-300 text-right rounded-lg"
               onClick={handleForgotPasswordClick}
             > Forgot password?</button>
       

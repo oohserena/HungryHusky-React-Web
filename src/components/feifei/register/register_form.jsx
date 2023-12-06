@@ -107,7 +107,7 @@ function RegisterForm(props) {
     <section className="flex flex-row justify-center items-center min-h-screen bg-white p-10">
       <div className="w-1/2 p-10">
         <h1 className="text-4xl text-center text-red-700 mb-10 font-bold">
-          Sign Up for XX
+          Sign Up for Hungry Huskies
         </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           {columns.map((column) => (
