@@ -105,3 +105,15 @@ export const getRatings = async (restaurantId) => {
   );
   return response.data;
 };
+
+export const findFoodieFavoritesCount = async (restaurantId) => {
+  const response = await request.get(`${BASE_API}/api/restaurants/${restaurantId}/foodieFavoritesCount`);
+  return response.data;
+};
+
+export const findAnalyticsFavoritesCount = async (restaurantId) => {
+  const response = await request.get(`${BASE_API}/api/restaurants/${restaurantId}/analyticsFavoritesCount`);
+  return response.data;
+};
+
+
