@@ -3,42 +3,39 @@ import React, { useEffect, useState } from "react";
 import NavigationBar from "@/components/common/NavigationBar";
 import RestaurantList from "./RestaurantList";
 import RestaurantSearchBar from "../search_bar";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import * as client from "../../client.js";
-import { usePathname, useSearchParams } from 'next/navigation'
- 
 
 export default function FoodieSearch() {
-    const searchParams = useSearchParams()
-    const [restaurants, setRestaurants] = useState([]);
-    const [isFoodie, setIsFoodie] = useState(true);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [restaurants, setRestaurants] = useState(null);
 
     useEffect(() => {
-        setIsFoodie(true);
-      }, []);
-
-    useEffect(() => {
-        fetchRestaurants(
-            searchParams.get('term'), 
-            searchParams.get('location')
-        );
+        if (searchParams) {
+            const term = searchParams.get('term');
+            const location = searchParams.get('location');
+            fetchRestaurants(term, location, router);
+        }
     }, [searchParams]);
-    
 
-    const fetchRestaurants = async (term, location) => {
+    const fetchRestaurants = async (term, location, router) => {
         try {
-            console.log('in fetch restaurants')
             const response = await client.searchRestaurants(term, location);
-            console.log(response)
+            if (!response || response.length === 0) {
+                router.push('/no_result_search');
+                return;
+            }
             setRestaurants(response);
         } catch (error) {
             console.error('Error fetching restaurants:', error);
+            router.push('/no_result_search');
         }
     };
 
-    // if (!isFoodie) {
-    //     return <div>Access Denied</div>
-    // }
+    if (restaurants === null) {
+        return null; // Or a loading indicator
+    }
 
     return (
         <div>

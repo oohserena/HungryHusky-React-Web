@@ -6,6 +6,7 @@ import Image from 'next/image';
 import * as client from "../../client.js";
 import { setCurrentUser } from "@/components/common/reducer";
 import { useDispatch, useSelector } from "react-redux";
+import StarRating from "../star_rating/StarRating.jsx";
 
 
 export default function RestaurantItem({id, name, rating, imageSrc}) {
@@ -87,6 +88,7 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
     }
   };
 
+
   
     return (
       <div className="flex flex-col relative shrink-0 box-border border ml-4 mt-5 pr-px border-solid border-neutral-400">
@@ -103,6 +105,7 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
               </h3>
               <div className="relative shrink-0 box-border h-auto text-xl font-semibold ml-6 mr-auto mt-2.5 max-sm:ml-8">
                 <div>Overall Rating: {rating}</div>
+                <div> <StarRating rating={rating} /></div>
               </div>
               <div className="flex flex-col relative shrink-0 box-border border mt-5 border-none">
                 <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
@@ -117,13 +120,13 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
                       4 stars:{ratingFourCount}
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-amber-500 text-center ml-8 mt-5">
-                      3 stars:{ratingFourCount}
+                      3 stars:{ratingThreeCount}
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-yellow-400 text-center ml-8 mt-5">
-                      2 stars:{ratingFourCount}
+                      2 stars:{ratingTwoCount}
                     </div>
                     <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-lime-500 text-center ml-8 mt-5">
-                      1 stars:{ratingFourCount}
+                      1 stars:{ratingOneCount}
                     </div>
                     </div>
                     <div className="flex flex-col items-stretch w-[33%] ml-5 max-md:w-full max-md:ml-0">
