@@ -28,18 +28,24 @@ export default function RestaurantSearchBar() {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      if ( currentUserRole === "FOODIE") {
+      if (!term || !location) {
+        alert("Please enter both a keyword and a location before searching.");
+        return;
+      }
+
+      if (currentUserRole === "FOODIE") {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
-      } else if ( currentUserRole === "BUSINESS ANALYST") {
+      } else if (currentUserRole === "BUSINESS ANALYST") {
         router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       } else {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       }
     } catch (error) {
-      console.error('Error fetching restaurants:', error);
-      setError(error);
+      console.error("Error fetching restaurants:", error);
+      setError(error); 
     }
-  };
+};
+
 
   return (
     <div className="flex flex-col relative shrink-0 box-border bg-white font-semibold">
@@ -51,7 +57,7 @@ export default function RestaurantSearchBar() {
             placeholder="Restaurant Name"
             className="text-xl min-h-[50px] p-2.5 rounded border border-solid border-stone-300 flex-1"
             onChange={(e) => setTerm(e.target.value)}
-            required={false}
+            required={true}
           />
           <input
             type="text"
@@ -59,7 +65,7 @@ export default function RestaurantSearchBar() {
             placeholder="98104"
             className="text-xl min-h-[50px] p-2.5 rounded border border-solid border-stone-300 flex-1"
             onChange={(e) => setLocation(e.target.value)}
-            required={false}
+            required={true}
           />
           <button
             className="bg-red-700 text-white rounded text-xl min-h-[50px] px-6 py-4 flex-shrink-0"
