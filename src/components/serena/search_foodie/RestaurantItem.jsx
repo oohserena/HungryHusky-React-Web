@@ -72,16 +72,16 @@ export default function RestaurantItem({ id, name, rating, imageSrc }) {
       <div className="flex flex-col relative shrink-0 box-border border ml-4 mt-5 pr-px border-solid border-neutral-400">
         <div className="flex flex-col relative shrink-0 box-border mt-4 mb-10">
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-            <div style={{ position: 'relative', width: '400px', height: '400px' }}>
+            <div onClick={handleDetailsClick} style={{ position: 'relative', width: '400px', height: '400px', cursor: 'pointer'}}>
               <Image src={imageSrc} alt={`Image of ${name}`} layout="fill" objectFit="cover" />
             </div>
             <div className="flex flex-col items-stretch w-[67%] ml-5 max-md:w-full max-md:ml-0">
-              <h3 className="relative shrink-0 box-border h-auto text-3xl font-semibold ml-6 mr-auto mt-2.5 max-sm:ml-8">
+              <h3 onClick={handleDetailsClick} className="relative shrink-0 box-border h-auto text-3xl font-semibold ml-6 mr-auto mt-2.5 max-sm:ml-8" style={{cursor: 'pointer'}}>
                 <ol start="1">
                   <li>{name}</li>
                 </ol>
               </h3>
-              <div className="relative shrink-0 box-border h-auto text-xl font-semibold ml-6 mr-auto mt-2.5 max-sm:ml-8">
+              <div onClick={handleDetailsClick} className="relative shrink-0 box-border h-auto text-xl font-semibold ml-6 mr-auto mt-2.5 max-sm:ml-8" style={{cursor: 'pointer'}}>
                 <div>Overall Rating: {rating}</div>
               </div>
               <div className="relative shrink-0 box-border h-auto text-xl font-semibold ml-6 mr-auto mt-5 max-sm:ml-8">
