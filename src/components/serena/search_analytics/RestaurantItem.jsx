@@ -23,6 +23,9 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
     const [ratingTwoCount, setRatingTwoCount] = useState(0);
     const [ratingOneCount, setRatingOneCount] = useState(0);
 
+    const [foodieFavoriteCounts, setFoodieFavoriteCounts] = useState(0);
+    const [analystFavoriteCounts, setAnalystFavoriteCounts] = useState(0);
+
     useEffect(() => {
       const fetchFavorites = async () => {
           try {
@@ -43,6 +46,7 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
       }
 
       fetchRatings();
+      fetchFavoriteCounts();
   }, [id, currentUser]);
   
     const handleDetailsClick = () => {
@@ -88,6 +92,18 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
     }
   };
 
+  const fetchFavoriteCounts = async () => {
+    try{
+      const foodieCounts = await client.findFoodieFavoritesCount(id);
+      const analystCounts = await client.findAnalyticsFavoritesCount(id);
+      setFoodieFavoriteCounts(foodieCounts.foodieFavoritesCount);
+      setAnalystFavoriteCounts(analystCounts.analyticsFavoritesCount);
+    } catch (error) {
+      console.error('Error creating favorite:', error);
+
+    }
+  }
+
 
   
     return (
@@ -131,7 +147,7 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
                     </div>
                     <div className="flex flex-col items-stretch w-[33%] ml-5 max-md:w-full max-md:ml-0">
                       <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
-                        Views
+                        Reviews
                       </div>
                       <div className="relative shrink-0 box-border h-auto text-center text-3xl text-red-700 font-semibold mt-5">
                         8,000
@@ -144,13 +160,13 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
                       <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
                         Foodies:{" "}
                         <font color="#9013fe">
-                          <b>360</b>
+                          <b>{foodieFavoriteCounts}</b>
                         </font>
                       </div>
                       <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
                         Analytics:{" "}
                         <font color="#4a90e2">
-                          <b>590</b>
+                          <b>{analystFavoriteCounts}</b>
                         </font>
                       </div>
                     </div>
