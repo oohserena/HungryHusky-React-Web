@@ -1,9 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import * as client from "../../client.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { IoIosRestaurant } from "react-icons/io";
 const defaultImage1 = "/images/resimage.jpg";
 const defaultImage2 = "/images/foodimage.jpeg";
 
@@ -16,7 +15,6 @@ function HomeComponent(props) {
   const currentUserId = currentUser?._id;
   const [recentReviewData, setRecentReviewData] = useState([]);
   const [recentActivityData, setRecentActivityData] = useState([]);
-  const [categoriesData, setCategoriesData] = useState([]);
   const [error, setError] = useState(null);
   const [term, setTerm] = useState("");
   const [location, setLocation] = useState("");
@@ -152,20 +150,6 @@ function HomeComponent(props) {
     fetchRecentActivityData();
   }, []);
 
-  // Categories
-  // useEffect(() => {
-  //   const fetchCategoriesData = async () => {
-  //     try {
-  //       const response = await fetch();
-  //       const data = await response.json();
-  //       setCategoriesData(data);
-  //     } catch (error) {
-  //       setError(error);
-  //     }
-  //   };
-  //   fetchCategoriesData();
-  // }, []);
-
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
@@ -173,7 +157,7 @@ function HomeComponent(props) {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       } else if ( currentUserRole === "BUSINESS ANALYST") {
         router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
-      } else {
+      } else if ( currentUserRole === "ADMIN") {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       };
     } catch (error) {
@@ -191,26 +175,29 @@ function HomeComponent(props) {
       <div key={review._id} className="flex flex-row items-stretch w-full">
         <div
           onClick={() => handleReviewNav(review.restaurant_id)}
-          className="cursor-pointer flex flex-col relative shrink-0 box-border border m-5 border-solid border-neutral-400 w-full rounded-lg"
+          className="cursor-pointer flex flex-col relative shrink-0 box-border border m-5 border-solid border-neutral-100 w-full rounded-lg"
         >
           <div className="flex items-stretch">
-            <div className="w-[40%] h-full">
+            <div className="w-40 h-40">
               <img
                 loading="lazy"
                 srcSet={review.restaurantImage}
-                className="object-cover w-full h-auto min-h-full"
+                className="object-cover w-full h-full my-2 px-2"
                 alt="Restaurant"
               />
             </div>
 
             <div className="flex flex-col w-[60%] ml-5">
-              <div className="box-border h-auto">
-                <font color="#4a4a4a">
-                  <b className="text-lg">{review.restaurantName}</b>
-                </font>
+              <div className="flex items-center box-border h-auto">
+                <IoIosRestaurant className="text-3xl text-green-700 mr-2" />
+                <span
+                  className="text-xl font-semibold text-green-700"
+                  style={{ lineHeight: "2.5rem" }}
+                >
+                  {review.restaurantName}
+                </span>
               </div>
-
-              <div className="box-border h-auto flex-grow">
+              <div className="box-border h-auto flex-grow px-2">
                 <font color="#4a4a4a">{review.review}</font>
               </div>
             </div>
@@ -227,6 +214,11 @@ function HomeComponent(props) {
     const handleActNavRestaurant = (restaurantId) => {
       router.push(`/search_detail/${restaurantId}`);
     };
+    //for user icon
+    const getInitials = (name) => {
+      return name.charAt(0).toUpperCase();
+    };
+
     return (
       <div className="flex justify-center flex-wrap -mx-2">
         {recentActivityData.map((activity) => (
@@ -234,26 +226,47 @@ function HomeComponent(props) {
             key={activity.id}
             className="flex flex-col items-stretch w-full md:w-1/3 px-2 mb-4"
           >
-            <div className="flex flex-col relative shrink-0 box-border h-auto border m-5 border-solid border-neutral-400 rounded-lg">
-              {/* link to user profile page */}
+            <div className="flex flex-col relative shrink-0 box-border h-auto border m-5 border-solid border-neutral-100 rounded-lg">
+              {/* link to user profile page border-neutral-400, border-transparent*/}
               <div
                 onClick={() => handleActNavProfile(activity.user_id)}
-                className="cursor-pointer relative shrink-0 box-border h-auto my-2.5 font-bold"
+                className="cursor-pointer relative flex shrink-0 box-border h-auto my-2.5 font-bold px-4"
               >
-                {activity.username}
+                <div
+                  className="flex items-center justify-center rounded-full bg-red-600 text-white font-semibold mr-2 text-base md:text-lg"
+                  style={{
+                    width: "2.5rem",
+                    height: "2.5rem",
+                    lineHeight: "2.5rem",
+                  }}
+                >
+                  {getInitials(activity.username)}
+                </div>
+                <span
+                  className="text-xl font-semibold text-red-700"
+                  style={{ lineHeight: "2.5rem" }}
+                >
+                  {activity.username}
+                </span>
               </div>
               <img
                 loading="lazy"
                 srcSet={activity.restaurantImage}
-                className="aspect-[2] object-cover object-center w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden my-2.5"
+                className="aspect-[2] object-cover object-center w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden my-2.5 px-2"
               />
               <div
                 onClick={() => handleActNavRestaurant(activity.restaurant_id)}
-                className="cursor-pointer relative shrink-0 box-border h-auto my-2.5 font-bold"
+                className="cursor-pointer relative flex items-center shrink-0 box-border h-auto my-2.5 font-bold px-2"
               >
-                {activity.restaurantName}
+                <IoIosRestaurant className="text-3xl text-green-700 mr-1" />
+                <span
+                  className="text-xl font-semibold text-green-700"
+                  style={{ lineHeight: "2.5rem" }}
+                >
+                  {activity.restaurantName}
+                </span>
               </div>
-              <div className="relative shrink-0 box-border h-auto my-5">
+              <div className="relative shrink-0 box-border ml-2 mr-2 h-auto my-2 text-gray-800">
                 {activity.content}
               </div>
             </div>
@@ -262,26 +275,6 @@ function HomeComponent(props) {
       </div>
     );
   };
-
-  // const renderCategories = () => {
-  //   return categoriesData.map((category) => (
-  //     <div
-  //       key={category.id}
-  //       className="flex flex-col items-stretch w-3/12 max-md:w-full max-md:ml-0"
-  //     >
-  //       <div className="flex flex-col relative shrink-0 box-border h-auto border ml-8 mr-5 my-5 border-solid border-neutral-400 font-bold">
-  //         <img
-  //           loading="lazy"
-  //           srcSet={category.imageSrc}
-  //           className="aspect-[1.1] object-cover object-top w-full shrink-0 box-border min-h-[20px] min-w-[20px] overflow-hidden mb-5"
-  //         />
-  //         <div className="relative shrink-0 box-border h-auto self-center mt-5">
-  //           {category.name}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   ));
-  // };
 
   return (
     <main className="flex flex-col relative shrink-0 box-border bg-white min-h-[auto]">
@@ -331,9 +324,26 @@ function HomeComponent(props) {
         <section className="flex flex-col relative shrink-0 box-border my-5">
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
             <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
-              <div className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5">
+              <style>
+                {`
+                  @keyframes blinker {    
+                  50% { opacity: 0; }
+                }
+                `}
+              </style>
+              <div
+                className="relative shrink-0 box-border h-auto text-center text-3xl text-gray-700 font-semibold tracking-wider mx-auto my-5 p-5"
+                style={{textShadow: `2px 2px 4px rgba(0, 0, 0, 0.3)`}}
+              >
+                <span 
+                  className="italic text-red-700 "
+                  style={{ animation: 'blinker 3s linear infinite' }}
+                >
+                  Welcome back, {currentUser.username}!
+                </span>
+                <br />
                 Your Recent Review
-                <div className="total-reviews">
+                <div className="total-reviews text-gray-700 text-2xl">
                   Total: {recentReviewData.length}
                 </div>
               </div>
@@ -347,22 +357,37 @@ function HomeComponent(props) {
           </div>
         </section>
       )}
-      <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5">
-        Hungry Huskies Recent Activity
+
+      {!currentUser && (
+          <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5 ">
+            <div 
+              className="relative shrink-0 box-border h-auto text-center text-3xl text-gray-700 font-semibold tracking-wider mx-auto my-5 p-5"
+              style={{textShadow: `2px 2px 4px rgba(0, 0, 0, 0.3)`}}
+            >
+              <span 
+                className="italic text-red-700 "
+                style={{ animation: 'blinker 3s linear infinite' }}
+              >
+                Welcome to Hungry Huskies!
+              </span>
+            </div>
+          </section>
+        )
+      }
+
+      <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5 ">
+        <div
+          className="text-gray-700"
+          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
+        >
+          Recent Activity
+        </div>
       </section>
       <section className="flex flex-col relative shrink-0 box-border mt-5 mx-16">
         <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0 justify-center">
           {renderRecentActivityItems()}
         </div>
       </section>
-      {/* <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5">
-        Categories
-      </section> */}
-      {/* <section className="flex flex-col relative shrink-0 box-border mx-16 my-5">
-        <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-          {renderCategories()}
-        </div>
-      </section> */}
     </main>
   );
 }
