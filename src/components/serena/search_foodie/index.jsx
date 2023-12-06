@@ -29,12 +29,11 @@ export default function FoodieSearch() {
             setRestaurants(response);
         } catch (error) {
             console.error('Error fetching restaurants:', error);
-            router.push('/no_result_search');
         }
     };
 
     if (restaurants === null) {
-        return null; // Or a loading indicator
+        return null;
     }
 
     return (

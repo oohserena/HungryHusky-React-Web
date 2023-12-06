@@ -31,7 +31,6 @@ export default function AnalyticsSearch() {
 
         } catch (error) {
             console.error('Error fetching restaurants:', error);
-            router.push('/no_result_search');
         }
     };
 
