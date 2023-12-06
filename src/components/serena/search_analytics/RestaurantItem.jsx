@@ -26,6 +26,8 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
     const [foodieFavoriteCounts, setFoodieFavoriteCounts] = useState(0);
     const [analystFavoriteCounts, setAnalystFavoriteCounts] = useState(0);
 
+    const [totalReviews, setTotalReviews] = useState(0);
+
     useEffect(() => {
       const fetchFavorites = async () => {
           try {
@@ -47,6 +49,7 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
 
       fetchRatings();
       fetchFavoriteCounts();
+      fetchTotalReviews();
   }, [id, currentUser]);
   
     const handleDetailsClick = () => {
@@ -102,10 +105,17 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
       console.error('Error creating favorite:', error);
 
     }
-  }
+  };
 
+  const fetchTotalReviews = async () => {
+    try {
+      const reviewCounts = await client.getTotalReviewsByRestaurantId(id);
+      setTotalReviews(reviewCounts);
+    } catch (error) {
+      console.error('Error creating favorite:', error);
+    }
+  };
 
-  
     return (
       <div className="flex flex-col relative shrink-0 box-border border ml-4 mt-5 pr-px border-solid border-neutral-400">
         <div className="flex flex-col relative shrink-0 box-border mt-4 mb-10">
@@ -126,46 +136,46 @@ export default function RestaurantItem({id, name, rating, imageSrc}) {
               <div className="flex flex-col relative shrink-0 box-border border mt-5 border-none">
                 <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                   <div className="flex flex-col items-stretch w-[33%] max-md:w-full max-md:ml-0">
-                    <div className="relative shrink-0 box-border h-auto font-semibold text-xl text-center ml-8 mt-5">
+                    <div className="relative shrink-0 box-border h-auto font-semibold text-xl text-center ml-8 mt-5" style={{ fontSize: '1.5em' }} >
                       Rating Distribution
                     </div>
-                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-red-700 text-center ml-8 mt-5">
+                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-red-700 text-center ml-8 mt-5" style={{ fontSize: '2em' }} >
                       5 stars: {ratingFiveCount}
                     </div>
-                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-orange-500 text-center ml-8 mt-5">
+                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-orange-500 text-center ml-8 mt-5" style={{ fontSize: '2em' }} >
                       4 stars:{ratingFourCount}
                     </div>
-                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-amber-500 text-center ml-8 mt-5">
+                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-amber-500 text-center ml-8 mt-5" style={{ fontSize: '2em' }} >
                       3 stars:{ratingThreeCount}
-                    </div>
-                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-yellow-400 text-center ml-8 mt-5">
+                    </div> 
+                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-yellow-400 text-center ml-8 mt-5" style={{ fontSize: '2em' }} >
                       2 stars:{ratingTwoCount}
                     </div>
-                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-lime-500 text-center ml-8 mt-5">
+                    <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-lime-500 text-center ml-8 mt-5" style={{ fontSize: '2em' }} >
                       1 stars:{ratingOneCount}
                     </div>
                     </div>
                     <div className="flex flex-col items-stretch w-[33%] ml-5 max-md:w-full max-md:ml-0">
-                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
+                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5" style={{ fontSize: '2em' }}>
                         Reviews
                       </div>
-                      <div className="relative shrink-0 box-border h-auto text-center text-3xl text-red-700 font-semibold mt-5">
-                        8,000
+                      <div className="relative shrink-0 box-border h-auto text-center text-3xl text-red-700 font-semibold mt-5" style={{ fontSize: '2.5em' }}>
+                        {totalReviews}
                       </div>
                     </div>
                     <div className="flex flex-col items-stretch w-[33%] ml-5 max-md:w-full max-md:ml-0" >
-                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
+                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5" style={{ fontSize: '2em' }}>
                         Favorites
                       </div>
-                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
+                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5" style={{ fontSize: '2em' }}>
                         Foodies:{" "}
-                        <font color="#9013fe">
+                        <font color="#9013fe" style={{ fontSize: '1.5em' }}>
                           <b>{foodieFavoriteCounts}</b>
                         </font>
                       </div>
-                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5">
+                      <div className="relative shrink-0 box-border h-auto text-xl font-semibold text-center mt-5" style={{ fontSize: '2em' }}>
                         Analytics:{" "}
-                        <font color="#4a90e2">
+                        <font color="#4a90e2" style={{ fontSize: '1.5em' }}>
                           <b>{analystFavoriteCounts}</b>
                         </font>
                       </div>
