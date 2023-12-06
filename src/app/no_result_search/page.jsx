@@ -3,6 +3,7 @@ import SearchNoResults from "@/components/serena/search_no_results";
 import { BrowserRouter } from "react-router-dom";
 import store from '../../components/store';
 import CurrentUser from "../../components/common/currentUser";
+import { Provider } from 'react-redux';
 
 export default function Page() {
   return (
