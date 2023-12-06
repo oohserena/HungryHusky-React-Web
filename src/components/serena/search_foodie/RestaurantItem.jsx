@@ -51,6 +51,8 @@ export default function RestaurantItem({ id, name, rating, imageSrc }) {
           } catch (error) {
               console.error('Error deleting favorite:', error);
           }
+      } else if (!currentUser) {
+          alert("Please login first!");
       } else {
           try {
               const newFavorite = await client.createFavorite({

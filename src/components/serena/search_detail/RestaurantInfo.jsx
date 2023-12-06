@@ -6,11 +6,15 @@ import { useRouter } from 'next/navigation';
 import * as client from '../../client.js';
 import { useSearchParams } from "react-router-dom";
 import Image from 'next/image';
+import { setCurrentUser } from "@/components/common/reducer";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function RestaurantInfo({restaurantId}) {
  
   const router = useRouter();
   const [restaurant, setRestaurant] = useState(null);
+  const { currentUser } = useSelector((state) => state.userReducer || {});
+
 
   useEffect(() => {
     if (restaurantId) {
@@ -21,7 +25,6 @@ export default function RestaurantInfo({restaurantId}) {
   const fetchRestaurant = async (restaurantId) => {
     try {
       const response = await client.RestaurantDetail(restaurantId);
-      console.log('setting rest')
       setRestaurant(response);
     } catch (error) {
       console.error('Error fetching restaurant detail:', error);
@@ -29,7 +32,12 @@ export default function RestaurantInfo({restaurantId}) {
   }
 
   const handleButtonClick = () => {
-    router.push(`/write_review/${restaurantId}`);
+    if (currentUser) {
+      router.push(`/write_review/${restaurantId}`);
+    } else {
+      alert("Please login first!");
+    }
+    
   };
 
   return (
