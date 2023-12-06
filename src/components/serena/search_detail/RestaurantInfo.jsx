@@ -50,16 +50,11 @@ export default function RestaurantInfo({restaurantId}) {
       </div>
         <div className="flex flex-col relative shrink-0 box-border h-[30px] w-[600px] mt-5">
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-            <div className="flex flex-col items-stretch w-6/12 max-md:w-full max-md:ml-0">
+           
               <p className="relative shrink-0 box-border text-lg font-semibold ml-36 max-sm:ml-2.5 max-sm:mr-auto">
-                Rating: {restaurant ? restaurant.rating: 'Loading...'}
+                Overall Rating: {restaurant ? restaurant.rating: 'Loading...'}
               </p>
-            </div>
-            <div className="flex flex-col items-stretch w-6/12 ml-5 max-md:w-full max-md:ml-0">
-              <p className="relative shrink-0 box-border h-auto text-lg font-semibold -ml-0.5 max-sm:ml-1.5 max-sm:mr-auto max-sm:mt-2.5">
-                ({restaurant ? restaurant.review_count : '0'} reviews)
-              </p>
-            </div>
+            
           </div>
         </div>
         <div className="flex flex-col relative shrink-0 box-border w-[500px] mr-auto mt-2.5 pl-5 max-sm:w-[357px] max-sm:mr-9 max-sm:mt-9 max-sm:pr-36">

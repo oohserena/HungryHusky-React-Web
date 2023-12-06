@@ -116,4 +116,9 @@ export const findAnalyticsFavoritesCount = async (restaurantId) => {
   return response.data;
 };
 
+export const getTotalReviewsByRestaurantId = async (restaurantId) => {
+  const response = await request.get(`${BASE_API}/api/restaurants/${restaurantId}/totalReviews`);
+  return response.data;
+};
+
 
