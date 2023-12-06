@@ -157,7 +157,7 @@ function HomeComponent(props) {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       } else if ( currentUserRole === "BUSINESS ANALYST") {
         router.push(`/analytics_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
-      } else if ( currentUserRole === "ADMIN") {
+      } else {
         router.push(`/foodie_search?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
       };
     } catch (error) {
