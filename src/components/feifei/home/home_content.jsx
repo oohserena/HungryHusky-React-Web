@@ -295,7 +295,7 @@ function HomeComponent(props) {
                         name="search-input-restaurants"
                         onChange={(e) => setTerm(e.target.value)}
                         className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
-                        required={false}
+                        required={true}
                       />
                       <input
                         type="text"
@@ -303,7 +303,7 @@ function HomeComponent(props) {
                         name="search-input-zipcode"
                         onChange={(e) => setLocation(e.target.value)}
                         className="text-xl p-2.5 rounded border border-solid border-stone-300 w-full"
-                        required={false}
+                        required={true}
                       />
                       <button
                         type="submit"
