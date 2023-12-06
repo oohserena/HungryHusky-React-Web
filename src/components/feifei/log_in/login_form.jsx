@@ -55,7 +55,7 @@ function LoginForm(props) {
         <div className="w-full max-w-md">
           {" "}
           <h1 className="text-red-700 text-center text-4xl mb-6 font-bold">
-            Log in to XX
+            Log in to Hungry Huskies
           </h1>
           <br />
           {error && <div className="alert alert-danger mb-2 mt-2 font-italic text-center">{error}</div>}
