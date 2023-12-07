@@ -7,6 +7,7 @@ import { setCurrentUser } from "../../common/reducer.js";
 function RegisterForm(props) {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -80,6 +81,7 @@ function RegisterForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
     try {
       const { firstName, lastName, email, password, businessAnalyst, foodie } = formData;
       let role;
@@ -96,6 +98,7 @@ function RegisterForm(props) {
       router.push('/'); 
     } catch (error) {
       console.error("Registration failed:", error);
+      setErrorMessage("Email already taken. Please use another email or log in"); 
     }
   };
 
@@ -156,6 +159,7 @@ function RegisterForm(props) {
               </label>
             </div>
           </div>
+          {errorMessage && <div className="text-red-500">{errorMessage}</div>}
           <button
             type="submit"
             className="w-full bg-red-700 text-white py-2 px-4 rounded hover:bg-red-800 transition duration-300"

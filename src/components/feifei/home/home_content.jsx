@@ -42,7 +42,6 @@ function HomeComponent(props) {
             };
           })
         );
-        //console.log("CurrUserReviews after parse", currUserReviews);
         setRecentReviewData(currUserReviews);
       } catch (error) {
         //console.error("Error fetching user reviews:", error);
@@ -76,6 +75,37 @@ function HomeComponent(props) {
   // All users'(Visitor&Login) most recent six activity/reviews
   useEffect(() => {
     // fetch all reviews
+
+    // const fetchRecentActivityData = async () => {
+    //   try {
+    //     const response = await fetch(
+    //       `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/reviews`
+    //     );
+    //     const data = await response.json();
+    //     const sortedData = data.sort(
+    //       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    //     );
+    //     const recentDataPromises = sortedData
+    //       .slice(0, 3)
+    //       .map(async (activity) => {
+    //         const { name, image } = await fetchRestaurantDetails(
+    //           activity.restaurant_id
+    //         );
+    //         return {
+    //           ...activity,
+    //           username: await fetchFirstName(activity.user_id),
+    //           restaurantName: name,
+    //           restaurantImage: image,
+    //         };
+    //       });
+    //     const recentData = await Promise.all(recentDataPromises);
+    //     setRecentActivityData(recentData);
+    //     //console.log("activity data", recentData);
+    //   } catch (error) {
+    //     setError(error);
+    //   }
+    // };
+
     const fetchRecentActivityData = async () => {
       try {
         const response = await fetch(
@@ -85,22 +115,23 @@ function HomeComponent(props) {
         const sortedData = data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        const recentDataPromises = sortedData
-          .slice(0, 6)
-          .map(async (activity) => {
-            const { name, image } = await fetchRestaurantDetails(
-              activity.restaurant_id
-            );
-            return {
-              ...activity,
-              username: await fetchFirstName(activity.user_id),
-              restaurantName: name,
-              restaurantImage: image,
-            };
+
+        const recentData = [];
+        for (const activity of sortedData.slice(0, 6)) {
+          const { name, image } = await fetchRestaurantDetails(
+            activity.restaurant_id
+          );
+          const username = await fetchFirstName(activity.user_id);
+          recentData.push({
+            ...activity,
+            username,
+            restaurantName: name,
+            restaurantImage: image,
           });
-        const recentData = await Promise.all(recentDataPromises);
+          // add 300ms delay
+          await new Promise((resolve) => setTimeout(resolve, 300));
+        }
         setRecentActivityData(recentData);
-        //console.log("activity data", recentData);
       } catch (error) {
         setError(error);
       }
@@ -183,7 +214,10 @@ function HomeComponent(props) {
     };
 
     return recentReviewData.slice(0, 3).map((review) => (
-      <div key={review._id} className="flex flex-col items-stretch w-full md:w-1/3 px-2 mb-4">
+      <div
+        key={review._id}
+        className="flex flex-col items-stretch w-full md:w-1/3 px-2 mb-4"
+      >
         <div
           onClick={() => handleReviewNav(review.restaurant_id)}
           className="cursor-pointer flex flex-col relative shrink-0 box-border border m-5 border-solid border-neutral-100 w-full rounded-lg"
@@ -227,8 +261,8 @@ function HomeComponent(props) {
     };
     //for user icon
     const getInitials = (name) => {
-      if (!name || typeof name !== 'string' || name.length === 0) {
-        return '';
+      if (!name || typeof name !== "string" || name.length === 0) {
+        return "";
       }
       return name.charAt(0).toUpperCase();
     };
@@ -385,14 +419,18 @@ function HomeComponent(props) {
         <section className="relative shrink-0 box-border h-auto text-center text-3xl font-semibold tracking-wider mx-auto my-5 p-5 ">
           <div
             className="relative shrink-0 box-border h-auto text-center text-3xl text-gray-700 font-semibold tracking-wider mx-auto my-5 p-5"
-            style={{ textShadow: `2px 2px 4px rgba(0, 0, 0, 0.3)` }}
+            style={{ textShadow: `2px 2px 4px rgba(0, 0, 0, 0.1)` }}
           >
             <span
               className="italic text-red-700 "
-              style={{ animation: "blinker 3s linear infinite" }}
+              style={{ animation: "blinker 5s linear infinite" }}
             >
               Welcome to Hungry Huskies!
             </span>
+            <p className="text-lg text-yellow-500 mt-4">
+              Explore and review your favorite restaurants, and share your culinary adventures with a community of fellow food lovers.
+            </p>
+
           </div>
         </section>
       )}
