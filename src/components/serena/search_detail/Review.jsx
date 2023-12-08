@@ -66,8 +66,8 @@ export default function Review({ restaurantId }) {
   return (
     <main className="flex flex-col relative shrink-0 box-border mt-0 min-h-[800px] items-stretch bg-white">
       <section className="flex flex-col relative shrink-0 box-border mt-5">
-        <header className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-          <h2 className="relative shrink-0 box-border h-auto text-xl font-semibold ml-44 mt-5 max-sm:ml-5 max-sm:mr-auto">
+        <header className="gap-5 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-between sm:gap-0">
+          <h2 className="text-xl font-semibold ml-5 mt-5 sm:ml-44">
             Recommended Reviews
           </h2>
         </header>
@@ -102,7 +102,7 @@ export default function Review({ restaurantId }) {
               </div>
               <div
                 onClick={() => handleClickOnUser(review.user_id)}
-                className="flex text-area flex-col relative shrink-0 box-border border h-[250px] w-[700px] text-lg mt-5 mx-auto p-2.5 rounded border-solid border-stone-300 max-sm:w-[300px]"
+                className="text-area flex flex-col relative shrink-0 box-border border h-[250px] w-full md:w-[700px] text-lg mt-5 mx-auto p-2.5 rounded border-solid border-stone-300"
                 style={{ cursor: "pointer" }}
               >
                 {review.content}
