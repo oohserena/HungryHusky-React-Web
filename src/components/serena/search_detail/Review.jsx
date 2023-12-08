@@ -80,21 +80,26 @@ export default function Review({ restaurantId }) {
         >
           <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
             <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
-              <h3
-                onClick={() => handleClickOnUser(review.user_id)}
-                className="relative shrink-0 box-border h-auto text-xl ml-52 mt-5 max-sm:ml-7"
-                style={{ cursor: "pointer" }}
-              >
-                {users[review.user_id] || "Loading..."}
-              </h3>
-              <p
-                onClick={() => handleClickOnUser(review.user_id)}
-                className="relative shrink-0 box-border h-auto ml-52 mt-2.5 max-sm:ml-7"
-                style={{ cursor: "pointer" }}
-              >
-                {formatDate(review.createdAt)}{" "}
-                {/* Adjust formatting as needed */}
-              </p>
+              <div className="flex flex-row items-center justify-between">
+                <button className="bg-red-700 text-white px-4 py-2 rounded-full ml-52 mt-2.5">
+                  <h3
+                    onClick={() => handleClickOnUser(review.user_id)}
+                    className="relative shrink-0 box-border h-auto text-xl max-sm:ml-7"
+                    style={{ cursor: "pointer" }}
+                  >
+                    {users[review.user_id] || "Loading..."}
+                  </h3>
+
+                  <p
+                    onClick={() => handleClickOnUser(review.user_id)}
+                    className="relative shrink-0 box-border h-auto max-sm:ml-7"
+                    style={{ cursor: "pointer" }}
+                  >
+                    {formatDate(review.createdAt)}{" "}
+                    {/* Adjust formatting as needed */}
+                  </p>
+                </button>
+              </div>
               <div
                 onClick={() => handleClickOnUser(review.user_id)}
                 className="flex text-area flex-col relative shrink-0 box-border border h-[250px] w-[700px] text-lg mt-5 mx-auto p-2.5 rounded border-solid border-stone-300 max-sm:w-[300px]"
