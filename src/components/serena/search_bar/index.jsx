@@ -67,7 +67,7 @@ export default function RestaurantSearchBar() {
             type="text"
             id="restaurant-input"
             placeholder="Restaurant Name"
-            className="text-xl min-h-[50px] p-2.5 rounded border border-solid border-stone-300 flex-1"
+            className="text-xl min-h-[50px] p-2.5 rounded border border-solid border-stone-300 flex-1 rounded-lg"
             onChange={(e) => setTerm(e.target.value)}
             required={true}
           />
@@ -75,7 +75,7 @@ export default function RestaurantSearchBar() {
             type="text"
             id="restaurant-zip-code"
             placeholder="98104"
-            className="text-xl min-h-[50px] p-2.5 rounded border border-solid border-stone-300 flex-1"
+            className="text-xl min-h-[50px] p-2.5 rounded border border-solid border-stone-300 flex-1 rounded-lg"
             onChange={(e) => setLocation(e.target.value)}
             required={true}
           />

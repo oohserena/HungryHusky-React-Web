@@ -110,7 +110,7 @@ export default function RestaurantItem({ id, name, rating, imageSrc }) {
   };
 
   return (
-    <div className="flex flex-col relative shrink-0 box-border border ml-4 mt-5 pr-px border-solid border-neutral-400">
+    <div className="flex flex-col relative shrink-0 box-border border ml-4 mt-5 pr-px border-solid border-neutral-200">
       <div className="flex flex-col relative shrink-0 box-border mt-4 mb-10">
         <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
           <div
