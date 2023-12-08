@@ -1,12 +1,10 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { useRouter } from "next/navigation";
 import * as client from "../../client.js";
-import { setCurrentUser } from "@/components/common/reducer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-export default function WriteBody({restaurantId}) {
+export default function WriteBody({ restaurantId }) {
   const [review, setReview] = React.useState("");
   const router = useRouter();
   const [restaurant, setRestaurant] = useState(null);
@@ -26,16 +24,15 @@ export default function WriteBody({restaurantId}) {
       // console.log('setting rest')
       setRestaurant(response);
     } catch (error) {
-      console.error('Error fetching restaurant detail:', error);
+      console.error("Error fetching restaurant detail:", error);
     }
-  }
+  };
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
   };
 
   const handlePostReview = async () => {
-    
     // console.log("currentUser ID:", currentUser?._id);
     // console.log(actualRestaurantId);
     // console.log("Review content:", review);
@@ -46,26 +43,26 @@ export default function WriteBody({restaurantId}) {
           user_id: currentUserId,
           restaurant_id: actualRestaurantId,
           content: review,
-        }
+        };
         await client.createReview(reviewData);
-        router.push('/search_detail/' + actualRestaurantId);
+        router.push("/search_detail/" + actualRestaurantId);
       } catch (error) {
-        console.error('Error posting review:', error);
+        console.error("Error posting review:", error);
       }
     } else {
-      console.error('Missing information for review');
+      console.error("Missing information for review");
     }
   };
 
   const handleCancel = () => {
-    router.push('/search_detail' + actualRestaurantId);
+    router.push("/search_detail" + actualRestaurantId);
   };
 
   return (
     <main className="flex flex-col relative shrink-0 box-border bg-white min-h-[2000px]">
       <section className="flex flex-col relative shrink-0 box-border mt-8 pl-5 pr-12">
         <h1 className="relative shrink-0 box-border h-auto font-semibold text-4xl ml-44 mr-auto mt-5 max-sm:w-[500px] max-sm:ml-5 max-sm:mr-auto max-sm:pr-px">
-          {restaurant ? restaurant.name: 'Loading...'}
+          {restaurant ? restaurant.name : "Loading..."}
         </h1>
       </section>
       <section className="flex flex-col relative shrink-0 box-border mt-5">

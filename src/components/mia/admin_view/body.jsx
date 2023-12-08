@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import * as client from "../../client.js";
 import { FaTrash } from "react-icons/fa";
-import { FaEdit } from "react-icons/fa";
 
 export default function Body() {
   const columns = ["UserId", "First Name", "Last Name", "Email"];

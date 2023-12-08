@@ -30,7 +30,6 @@ export default function ProfileComponent(props) {
   };
 
   const handleEditProfile = () => {
-    console.log("edit profile");
     router.push(`/edit_profile?id=${currentUserId}`);
   };
 
