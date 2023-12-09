@@ -139,7 +139,7 @@ function RegisterForm(props) {
               <input
                 type="checkbox"
                 id="businessAnalyst"
-                name="businessAnalyst"
+                name="BUSINESS ANALYST"
                 className="mr-2"
                 checked={formData.businessAnalyst}
                 onChange={handleCheckboxChange}
@@ -152,7 +152,7 @@ function RegisterForm(props) {
               <input
                 type="checkbox"
                 id="foodie"
-                name="foodie"
+                name="FOODIE"
                 className="mr-2"
                 checked={formData.foodie}
                 onChange={handleCheckboxChange}
