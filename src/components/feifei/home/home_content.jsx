@@ -53,7 +53,7 @@ function HomeComponent(props) {
     const fetchRestaurantDetails = async (restaurantId) => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/businesses/${restaurantId}`
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/businesses/${restaurantId}`
         );
         if (response.status !== 200) {
           return { name: "Restaurant AAA", image: defaultImage2 };
@@ -163,7 +163,7 @@ function HomeComponent(props) {
     const fetchRestaurantDetails = async (restaurantId) => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/businesses/${restaurantId}`
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/businesses/${restaurantId}`
         );
         if (response.status !== 200) {
           return { name: "Restaurant AAA", image: defaultImage1 };
@@ -428,9 +428,9 @@ function HomeComponent(props) {
               Welcome to Hungry Huskies!
             </span>
             <p className="text-lg text-yellow-500 mt-4">
-              Explore and review your favorite restaurants, and share your culinary adventures with a community of fellow food lovers.
+              Explore and review your favorite restaurants, and share your
+              culinary adventures with a community of fellow food lovers.
             </p>
-
           </div>
         </section>
       )}

@@ -85,7 +85,7 @@ export default function ProfileComponent(props) {
   const fetchRestaurantDetails = async (restaurantId) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/businesses/${restaurantId}`
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/businesses/${restaurantId}`
       );
       if (response.status !== 200) {
         return { name: "Restaurant AAA", image: defaultImage };
