@@ -74,8 +74,8 @@ function RegisterForm(props) {
     const { name, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      businessAnalyst: name === "BUSINESS ANALYST" ? checked : false,
-      foodie: name === "FOODIE" ? checked : false,
+      businessAnalyst: name === "businessAnalyst" ? checked : false,
+      foodie: name === "foodie" ? checked : false,
     }));
   };
 
@@ -91,7 +91,7 @@ function RegisterForm(props) {
       } else if (foodie) {
         role = "FOODIE";
       } else {
-        role = "FOODIE";
+        role = "DefaultRole";
       }
       const credentials = { firstName, lastName, email, password, role };
       const user = await client.register(credentials);
@@ -139,7 +139,7 @@ function RegisterForm(props) {
               <input
                 type="checkbox"
                 id="businessAnalyst"
-                name="BUSINESS ANALYST"
+                name="businessAnalyst"
                 className="mr-2"
                 checked={formData.businessAnalyst}
                 onChange={handleCheckboxChange}
@@ -152,7 +152,7 @@ function RegisterForm(props) {
               <input
                 type="checkbox"
                 id="foodie"
-                name="FOODIE"
+                name="foodie"
                 className="mr-2"
                 checked={formData.foodie}
                 onChange={handleCheckboxChange}
