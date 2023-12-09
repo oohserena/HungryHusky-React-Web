@@ -7,7 +7,7 @@ import { setCurrentUser } from "../../common/reducer.js";
 function RegisterForm(props) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -72,38 +72,41 @@ function RegisterForm(props) {
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    setFormData((prevData) => ({ 
+    setFormData((prevData) => ({
       ...prevData,
-      businessAnalyst: name === 'businessAnalyst' ? checked : false,
-      foodie: name === 'foodie' ? checked : false
+      businessAnalyst: name === "BUSINESS ANALYST" ? checked : false,
+      foodie: name === "FOODIE" ? checked : false,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage('');
+    setErrorMessage("");
     try {
-      const { firstName, lastName, email, password, businessAnalyst, foodie } = formData;
+      const { firstName, lastName, email, password, businessAnalyst, foodie } =
+        formData;
       let role;
       if (businessAnalyst) {
-        role = "Business Analyst";
+        role = "BUSINESS ANALYST";
       } else if (foodie) {
-        role = "Foodie";
+        role = "FOODIE";
       } else {
-        role = "DefaultRole"; 
+        role = "FOODIE";
       }
-      const credentials = { firstName, lastName, email, password, role};
+      const credentials = { firstName, lastName, email, password, role };
       const user = await client.register(credentials);
       dispatch(setCurrentUser(user));
-      router.push('/'); 
+      router.push("/");
     } catch (error) {
       console.error("Registration failed:", error);
-      setErrorMessage("Email already taken. Please use another email or log in"); 
+      setErrorMessage(
+        "Email already taken. Please use another email or log in"
+      );
     }
   };
 
   const handleLoginClick = () => {
-    router.push('/login');
+    router.push("/login");
   };
 
   return (
@@ -172,7 +175,10 @@ function RegisterForm(props) {
               type="button"
               className="text-blue-500 hover:text-blue-700 transition duration-300"
               onClick={handleLoginClick}
-            > Log in</button>
+            >
+              {" "}
+              Log in
+            </button>
           </p>
         </form>
       </div>
