@@ -48,9 +48,9 @@ function LoginForm(props) {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen">
       {" "}
-      <section className="w-1/2 flex flex-col justify-start items-center bg-white pt-100 p-24">
+      <section className="w-full md:w-1/2 flex flex-col justify-start items-center bg-white pt-100 p-24">
         {" "}
         <div className="w-full max-w-md">
           {" "}
@@ -98,7 +98,7 @@ function LoginForm(props) {
           </form>
         </div>
       </section>
-      <div className="w-1/2  p-20 bg-white">
+      <div className="w-full md:w-1/2 p-20 bg-white">
         <img
           loading="lazy"
           srcSet="https://cdn.builder.io/api/v1/image/assets%2F92012c9ce23446e48cb46842c120eec0%2Fd5ed74b25d1c4840a59d56b3ddc9eed0?width=100 100w, 
