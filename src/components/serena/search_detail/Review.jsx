@@ -64,53 +64,42 @@ export default function Review({ restaurantId }) {
   };
 
   return (
-    <main className="flex flex-col relative shrink-0 box-border mt-0 min-h-[800px] items-stretch bg-white">
-      <section className="flex flex-col relative shrink-0 box-border mt-5">
-        <header className="gap-5 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-between sm:gap-0">
-          <h2 className="text-xl font-semibold ml-5 mt-5 sm:ml-44">
-            Recommended Reviews
+    <main className="flex flex-col bg-white min-h-screen">
+      <section className="mt-5 pr-5">
+        <header className="flex justify-start pl-5 sm:pl-36 recommend-margin" >
+          <h2 className="text-xl font-semibold">
+            Recommend Reviews
           </h2>
         </header>
       </section>
-
+  
       {reviews.map((review, index) => (
-        <section
-          key={index}
-          className="flex flex-col relative shrink-0 box-border mt-5"
-        >
-          <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
-            <div className="flex flex-col items-stretch w-full max-md:w-full max-md:ml-0">
-              <div className="flex flex-row items-center justify-between">
-                <button className="bg-red-700 text-white px-4 py-2 rounded-full ml-52 mt-2.5">
-                  <h3
-                    onClick={() => handleClickOnUser(review.user_id)}
-                    className="relative shrink-0 box-border h-auto text-xl max-sm:ml-7"
-                    style={{ cursor: "pointer" }}
-                  >
-                    {users[review.user_id] || "Loading..."}
-                  </h3>
-
-                  <p
-                    onClick={() => handleClickOnUser(review.user_id)}
-                    className="relative shrink-0 box-border h-auto max-sm:ml-7"
-                    style={{ cursor: "pointer" }}
-                  >
-                    {formatDate(review.createdAt)}{" "}
-                    {/* Adjust formatting as needed */}
-                  </p>
-                </button>
-              </div>
-              <div
+        <section key={index} className="mt-5 px-5">
+          <div className="flex justify-start pl-5 sm:pl-36">
+            <div className="text-center">
+              <button 
+                className="bg-red-700 text-white px-4 py-2 rounded-full my-2.5"
                 onClick={() => handleClickOnUser(review.user_id)}
-                className="text-area flex flex-col relative shrink-0 box-border border h-[250px] w-full md:w-[700px] text-lg mt-5 mx-auto p-2.5 rounded border-solid border-stone-300"
-                style={{ cursor: "pointer" }}
               >
-                {review.content}
-              </div>
+                <h3 className="text-xl cursor-pointer">
+                  {users[review.user_id] || "Loading..."}
+                </h3>
+                <p className="cursor-pointer">
+                  {formatDate(review.createdAt)}
+                </p>
+              </button>
             </div>
+          </div>
+          <div
+            onClick={() => handleClickOnUser(review.user_id)}
+            className="text-area flex flex-col border h-1/4 md:h-1/3 lg:h-1/2 w-1/3 md:w-1/4 lg:w-1/5 text-lg mt-5 mx-auto p-2.5 rounded border-stone-300 cursor-pointer break-words overflow-y-auto"
+          >
+            {review.content}
           </div>
         </section>
       ))}
     </main>
   );
+  
+  
 }
