@@ -1,8 +1,8 @@
-import React, { useEffect }from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as client from "../../client.js";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCurrentUser } from "../../common/reducer.js";
 
 function LoginForm(props) {
@@ -12,10 +12,10 @@ function LoginForm(props) {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser);
-  
+
   useEffect(() => {
     if (currentUser) {
-      router.push('/');
+      router.push("/");
       return;
     }
   }, [currentUser, router]);
@@ -26,25 +26,25 @@ function LoginForm(props) {
       const credentials = { email: email, password: password };
       const user = await client.login(credentials);
       dispatch(setCurrentUser(user));
-      router.push('/');
+      router.push("/");
       console.log(user);
     } catch (error) {
-      let errorMessage = 'Something went wrong. Please try again later';
+      let errorMessage = "Something went wrong. Please try again later";
       if (error.response && error.response.status === 401) {
-        errorMessage = 'Wrong email or password. Please try again'; 
+        errorMessage = "Wrong email or password. Please try again";
       }
       alert(errorMessage);
       setError(errorMessage);
       console.error(error);
     }
-  }
+  };
 
   const handleForgotPasswordClick = () => {
     // Add logic
   };
 
   const handleSignUpClick = () => {
-    router.push('/register');
+    router.push("/register");
   };
 
   return (
@@ -58,7 +58,11 @@ function LoginForm(props) {
             Log in to Hungry Huskies
           </h1>
           <br />
-          {error && <div className="alert alert-danger mb-2 mt-2 font-italic text-center">{error}</div>}
+          {error && (
+            <div className="alert alert-danger mb-2 mt-2 font-italic text-center">
+              {error}
+            </div>
+          )}
           <br />
           <form onSubmit={handleLogIn} className="flex flex-col gap-5">
             <input
@@ -81,19 +85,25 @@ function LoginForm(props) {
               type="button"
               className="text-blue-500 hover:text-blue-700 transition duration-300 text-right rounded-lg"
               onClick={handleForgotPasswordClick}
-            > Forgot password?</button>
-      
+            >
+              {" "}
+              Forgot password?
+            </button>
+
             <button
               type="submit"
               className="bg-red-700 text-white rounded h-12 font-semibold"
               // onClick={handleLogIn}
-            > Log in</button>
-            
+            >
+              {" "}
+              Log in
+            </button>
+
             <p className="text-center mt-4 text-right">
-              Don't have an account?&nbsp;
+              Don&apos;t have an account?&nbsp;
               <a href="#" className="text-blue-500" onClick={handleSignUpClick}>
                 Sign up
-              </a>  
+              </a>
             </p>
           </form>
         </div>
