@@ -8,8 +8,7 @@
 - [Tech Stack](#api-endpoints)
 - [Installation](#installation)
 - [Directory Structure](#directory-structure)
-- [Architecture](#architecture)
-- [Environment Variables](#environment-variables)
+
 
 ## Project Overview
 
