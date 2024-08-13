@@ -74,38 +74,6 @@ function HomeComponent(props) {
 
   // All users'(Visitor&Login) most recent six activity/reviews
   useEffect(() => {
-    // fetch all reviews
-
-    // const fetchRecentActivityData = async () => {
-    //   try {
-    //     const response = await fetch(
-    //       `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/reviews`
-    //     );
-    //     const data = await response.json();
-    //     const sortedData = data.sort(
-    //       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-    //     );
-    //     const recentDataPromises = sortedData
-    //       .slice(0, 3)
-    //       .map(async (activity) => {
-    //         const { name, image } = await fetchRestaurantDetails(
-    //           activity.restaurant_id
-    //         );
-    //         return {
-    //           ...activity,
-    //           username: await fetchFirstName(activity.user_id),
-    //           restaurantName: name,
-    //           restaurantImage: image,
-    //         };
-    //       });
-    //     const recentData = await Promise.all(recentDataPromises);
-    //     setRecentActivityData(recentData);
-    //     //console.log("activity data", recentData);
-    //   } catch (error) {
-    //     setError(error);
-    //   }
-    // };
-
     const fetchRecentActivityData = async () => {
       try {
         const response = await fetch(
@@ -129,7 +97,7 @@ function HomeComponent(props) {
             restaurantImage: image,
           });
           // add 300ms delay
-          await new Promise((resolve) => setTimeout(resolve, 300));
+          // await new Promise((resolve) => setTimeout(resolve, 300));
         }
         setRecentActivityData(recentData);
       } catch (error) {
